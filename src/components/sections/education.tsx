@@ -33,16 +33,16 @@ export function Education() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.2 }}
-            className="relative pl-8 border-l-2 border-blue-600"
+            className="relative pl-8 border-l-2 border-blue-600 pb-2 hover:border-blue-500 transition-colors"
           >
-            <div className="absolute w-4 h-4 bg-blue-600 rounded-full -left-[9px] top-0" />
-            <div className="space-y-2">
-              <h3 className="text-xl font-semibold">{item.title}</h3>
+            <div className="absolute w-4 h-4 bg-blue-600 rounded-full -left-[9px] top-0 ring-4 ring-background" />
+            <div className="space-y-2 p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+              <h3 className="text-xl font-semibold text-foreground">{item.title}</h3>
               {item.institution && (
-                <p className="text-muted-foreground">{item.institution}</p>
+                <p className="text-blue-600 font-medium">{item.institution}</p>
               )}
-              <p className="text-sm text-muted-foreground">{item.period}</p>
-              <p className="text-muted-foreground mt-2">{item.description}</p>
+              <p className="text-sm text-muted-foreground font-medium">{item.period}</p>
+              <p className="text-muted-foreground mt-2 leading-relaxed">{item.description}</p>
             </div>
           </motion.div>
         ))}

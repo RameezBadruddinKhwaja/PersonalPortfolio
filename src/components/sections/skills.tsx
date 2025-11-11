@@ -22,13 +22,23 @@ const skills = [
     ],
   },
   {
-    category: "AI & Tools",
+    category: "AI & DevOps",
     items: [
       { name: "Python", level: "Intermediate" },
       { name: "OpenAI SDK", level: "Intermediate" },
       { name: "Gemini API", level: "Intermediate" },
-      { name: "Git", level: "Advanced" },
-      { name: "Docker", level: "Basic" },
+      { name: "FastAPI", level: "Intermediate" },
+      { name: "Agentic AI", level: "Intermediate" },
+    ],
+  },
+  {
+    category: "Tools & Platforms",
+    items: [
+      { name: "Git & GitHub", level: "Advanced" },
+      { name: "Vercel", level: "Advanced" },
+      { name: "Supabase", level: "Intermediate" },
+      { name: "Passport.js", level: "Intermediate" },
+      { name: "ShadCN UI", level: "Advanced" },
     ],
   },
 ]
@@ -64,7 +74,7 @@ export function Skills() {
         variants={container}
         initial="hidden"
         animate="show"
-        className="grid grid-cols-1 md:grid-cols-3 gap-8"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
       >
         {skills.map((category) => (
           <motion.div
