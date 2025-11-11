@@ -23,8 +23,8 @@ export function Hero() {
         </span>
       </motion.h1>
 
-      <motion.p 
-        className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-8"
+      <motion.p
+        className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.4 }}
@@ -51,8 +51,8 @@ export function Hero() {
         </Link>
       </motion.div>
 
-      <motion.p 
-        className="text-sm text-gray-500 dark:text-gray-400 mt-12"
+      <motion.p
+        className="text-sm text-muted-foreground mt-12"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.8 }}
