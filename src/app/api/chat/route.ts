@@ -1,27 +1,61 @@
-import { NextResponse } from 'next/server'
+import { NextResponse } from "next/server"
+import { z } from "zod"
+
+const chatSchema = z.object({
+  message: z.string().min(1, "Message cannot be empty"),
+})
 
 export async function POST(req: Request) {
   try {
-    const { message } = await req.json()
+    const data = await req.json()
+    const parsed = chatSchema.parse(data)
 
-    // Try to call local RameezBot FastAPI if available
-    try {
-      const res = await fetch(process.env.RAMEEZBOT_URL || 'http://localhost:8000/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message }),
-      })
-      if (res.ok) {
-        const data = await res.json()
-        return NextResponse.json({ reply: data.reply })
-      }
-    } catch (err) {
-      console.warn('RameezBot local not available', err)
+    // Get AI bot URL from environment or use fallback
+    const botUrl = process.env.NEXT_PUBLIC_AI_BOT_URL || "http://localhost:8000"
+
+    // Call the Python FastAPI backend
+    const response = await fetch(`${botUrl}/chat`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message: parsed.message }),
+    })
+
+    if (!response.ok) {
+      console.error("AI bot request failed:", response.statusText)
+      return NextResponse.json(
+        {
+          reply: "Sorry, I'm having trouble connecting right now. Please try again later!"
+        },
+        { status: 200 }
+      )
     }
 
-    // Fallback reply
-    return NextResponse.json({ reply: `RameezBot (fallback): I heard: ${message}` })
+    const botData = await response.json()
+
+    // Optionally: Store chat message in database for analytics
+    // const { data: inserted, error } = await supabase
+    //   .from("chat_messages")
+    //   .insert({
+    //     user_message: parsed.message,
+    //     bot_reply: botData.reply,
+    //   })
+
+    return NextResponse.json({ reply: botData.reply }, { status: 200 })
   } catch (err) {
-    return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
+    console.error("Chat API error:", err)
+
+    if (err instanceof z.ZodError) {
+      return NextResponse.json({ error: err.errors }, { status: 400 })
+    }
+
+    // Fallback response when AI bot is unavailable
+    return NextResponse.json(
+      {
+        reply: "Hello! I'm RameezBot. I'm currently offline, but Rameez will get back to you soon. Feel free to leave a message in the feedback form!"
+      },
+      { status: 200 }
+    )
   }
 }

@@ -1,45 +1,117 @@
 import Link from "next/link"
-import { Github, Linkedin, Mail } from "lucide-react"
+import { Github, Linkedin, Mail, MapPin } from "lucide-react"
 
 export function Footer() {
+  const currentYear = new Date().getFullYear()
+
   return (
-    <footer className="border-t">
-      <div className="container flex flex-col items-center justify-between gap-4 py-10 md:h-24 md:flex-row md:py-0">
-        <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-          <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
-            Built by{" "}
-            <Link
-              href="https://github.com/RameezBader"
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium underline underline-offset-4"
-            >
-              Rameez Bader Khwaja
+    <footer className="w-full border-t bg-muted/30">
+      <div className="container py-8 md:py-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Brand & Tagline */}
+          <div className="space-y-3">
+            <Link href="/" className="font-bold text-xl inline-block">
+              <span className="text-foreground">Rameez</span>
+              <span className="text-blue-600">.dev</span>
             </Link>
-            . Using Next.js 14, TypeScript & Tailwind.
-          </p>
+            <p className="text-sm text-muted-foreground max-w-xs">
+              Building intelligent, modern, and responsive web experiences using Next.js,
+              TypeScript, and AI-driven technologies.
+            </p>
+          </div>
+
+          {/* Quick Links */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-sm">Quick Links</h3>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link
+                  href="/about"
+                  className="text-muted-foreground hover:text-blue-600 transition-colors"
+                >
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/projects"
+                  className="text-muted-foreground hover:text-blue-600 transition-colors"
+                >
+                  Projects
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/feedback"
+                  className="text-muted-foreground hover:text-blue-600 transition-colors"
+                >
+                  Feedback
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/admin"
+                  className="text-muted-foreground hover:text-blue-600 transition-colors"
+                >
+                  Admin
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Contact & Socials */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-sm">Get in Touch</h3>
+            <div className="space-y-3 text-sm">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Mail className="h-4 w-4 text-blue-600" />
+                <a
+                  href="mailto:rameezbaderkhwaja@gmail.com"
+                  className="hover:text-blue-600 transition-colors"
+                >
+                  rameezbaderkhwaja@gmail.com
+                </a>
+              </div>
+
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <MapPin className="h-4 w-4 text-blue-600" />
+                <span>Karachi, Pakistan</span>
+              </div>
+
+              <div className="flex gap-4 mt-4">
+                <a
+                  href="https://github.com/RameezBader"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-blue-600 transition-colors"
+                  aria-label="GitHub"
+                >
+                  <Github className="h-5 w-5" />
+                </a>
+                <a
+                  href="https://linkedin.com/in/rameezbaderkhwaja"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-blue-600 transition-colors"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin className="h-5 w-5" />
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="flex gap-4">
-          <Link
-            href="https://github.com/RameezBader"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <Github className="h-5 w-5" />
-            <span className="sr-only">GitHub</span>
-          </Link>
-          <Link
-            href="https://linkedin.com/in/rameezbaderkhwaja"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <Linkedin className="h-5 w-5" />
-            <span className="sr-only">LinkedIn</span>
-          </Link>
-          <Link href="mailto:rameezbaderkhwaja@gmail.com">
-            <Mail className="h-5 w-5" />
-            <span className="sr-only">Email</span>
-          </Link>
+
+        {/* Bottom Bar */}
+        <div className="mt-8 pt-6 border-t border-border">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
+            <p>
+              © {currentYear} Rameez Bader Khwaja. All rights reserved.
+            </p>
+            <p className="text-xs">
+              Built with Next.js, TypeScript, Tailwind CSS & ❤️
+            </p>
+          </div>
         </div>
       </div>
     </footer>

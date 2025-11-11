@@ -6,6 +6,8 @@ const feedbackSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
   profession: z.string().optional(),
+  country: z.string().optional(),
+  linkedin: z.string().url().optional().or(z.literal("")),
   message: z.string().min(10),
 })
 
@@ -21,6 +23,8 @@ export async function POST(req: Request) {
         name: parsed.name,
         email: parsed.email,
         profession: parsed.profession || null,
+        country: parsed.country || null,
+        linkedin: parsed.linkedin || null,
         message: parsed.message,
       })
       .select()

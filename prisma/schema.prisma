@@ -12,8 +12,12 @@ model Feedback {
   name       String
   email      String
   profession String?
+  country    String?
+  linkedin   String?
   message    String
   created_at DateTime @default(now())
+
+  @@map("feedbacks")
 }
 
 model Project {
@@ -24,4 +28,15 @@ model Project {
   live        String?
   repo        String?
   created_at  DateTime @default(now())
+
+  @@map("projects")
+}
+
+model ChatMessage {
+  id         String   @id @default(cuid())
+  user_message String
+  bot_reply    String
+  created_at DateTime @default(now())
+
+  @@map("chat_messages")
 }
