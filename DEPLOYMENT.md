@@ -1,268 +1,479 @@
-# Deployment Guide
+# 🚀 Production Deployment Guide
 
-This guide walks you through deploying your portfolio to production.
-
-## Prerequisites Checklist
-
-Before deploying, ensure you have:
-
-- [x] Supabase project created and database tables set up (see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md))
-- [x] Gemini API key obtained from [Google AI Studio](https://makersuite.google.com/app/apikey)
-- [x] GitHub repository created and code pushed
-- [x] Vercel account created at [vercel.com](https://vercel.com)
-
-## Step 1: Deploy Frontend to Vercel
-
-### 1.1 Push Code to GitHub
-
-```bash
-# Add all files
-git add .
-
-# Commit changes
-git commit -m "feat: complete portfolio website with AI chatbot integration"
-
-# Push to main branch
-git push origin main
-```
-
-### 1.2 Import Project to Vercel
-
-1. Go to [vercel.com/new](https://vercel.com/new)
-2. Click "Import Git Repository"
-3. Select your `PersonalPortfolio` repository
-4. Configure project:
-   - **Framework Preset:** Next.js
-   - **Root Directory:** `./`
-   - **Build Command:** `npm run build`
-   - **Output Directory:** `.next`
-
-### 1.3 Add Environment Variables
-
-In Vercel dashboard, go to **Settings → Environment Variables** and add:
-
-| Variable | Value | Environment |
-|----------|-------|-------------|
-| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL | Production, Preview, Development |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Your Supabase anon key | Production, Preview, Development |
-| `DATABASE_URL` | Your Supabase database URL | Production, Preview, Development |
-| `GEMINI_API_KEY` | Your Gemini API key | Production, Preview, Development |
-| `NEXT_PUBLIC_AI_BOT_URL` | `https://your-ai-bot-url.onrender.com` (or localhost for dev) | Production, Preview, Development |
-
-### 1.4 Deploy
-
-Click **Deploy** and wait for the build to complete (usually 1-2 minutes).
-
-Your site will be live at: `https://your-project-name.vercel.app`
-
-## Step 2: Deploy AI Chatbot Backend
-
-You have three options for deploying the Python FastAPI chatbot:
-
-### Option A: Deploy to Render.com (Recommended - Free Tier Available)
-
-1. Go to [render.com](https://render.com) and sign up
-2. Click **New +** → **Web Service**
-3. Connect your GitHub repository
-4. Configure:
-   - **Name:** `rameezbot-api`
-   - **Root Directory:** `./`
-   - **Build Command:** `pip install -r ai_bot/requirements.txt`
-   - **Start Command:** `uvicorn ai_bot.app:app --host 0.0.0.0 --port $PORT`
-   - **Instance Type:** Free (or paid for better performance)
-
-5. Add Environment Variable:
-   - `GEMINI_API_KEY`: Your Gemini API key
-
-6. Click **Create Web Service**
-
-7. Once deployed, copy the URL (e.g., `https://rameezbot-api.onrender.com`)
-
-8. Go back to Vercel → **Settings → Environment Variables**
-   - Update `NEXT_PUBLIC_AI_BOT_URL` to your Render URL
-   - Redeploy your Vercel app
-
-### Option B: Deploy to Railway.app
-
-1. Go to [railway.app](https://railway.app)
-2. Click **New Project** → **Deploy from GitHub repo**
-3. Select your repository
-4. Add environment variable: `GEMINI_API_KEY`
-5. Configure:
-   - **Start Command:** `uvicorn ai_bot.app:app --host 0.0.0.0 --port $PORT`
-6. Deploy and copy the generated URL
-7. Update `NEXT_PUBLIC_AI_BOT_URL` in Vercel
-
-### Option C: Deploy as Vercel Serverless Function (Advanced)
-
-See [Vercel Python documentation](https://vercel.com/docs/functions/serverless-functions/runtimes/python) for deploying Python functions on Vercel.
-
-## Step 3: Configure Custom Domain (Optional)
-
-### 3.1 Purchase Domain
-
-Buy a domain from:
-- [Namecheap](https://www.namecheap.com/) - Recommended: `rameez.tech` or `rameezbader.me`
-- [Google Domains](https://domains.google/)
-- [Cloudflare](https://www.cloudflare.com/products/registrar/)
-
-### 3.2 Add Domain to Vercel
-
-1. In Vercel dashboard, go to **Settings → Domains**
-2. Click **Add Domain**
-3. Enter your domain name (e.g., `rameez.tech`)
-4. Follow the DNS configuration instructions
-5. Add the provided DNS records to your domain registrar
-6. Wait for DNS propagation (can take up to 48 hours, usually 15 minutes)
-
-### 3.3 Update Metadata Base URL
-
-After your custom domain is configured, update `src/app/layout.tsx`:
-
-```typescript
-metadataBase: new URL("https://rameez.tech"), // Your actual domain
-```
-
-Commit and push the changes to trigger a redeployment.
-
-## Step 4: Post-Deployment Checklist
-
-After deployment, verify everything works:
-
-- [ ] Visit your deployed URL
-- [ ] Test dark/light mode toggle
-- [ ] Navigate through all pages (Home, About, Projects, Feedback)
-- [ ] Submit a test feedback form
-- [ ] Check Supabase database to see if feedback was stored
-- [ ] Open RameezBot chatbot and send a message
-- [ ] Test chatbot responses
-- [ ] Check responsiveness on mobile (use browser dev tools)
-- [ ] Verify all links work (GitHub, LinkedIn, email)
-- [ ] Check /admin dashboard loads
-- [ ] Test SEO: Open Graph preview at [metatags.io](https://metatags.io/)
-
-## Step 5: Enable Analytics (Optional but Recommended)
-
-### Vercel Analytics
-
-1. In Vercel dashboard, go to **Analytics**
-2. Click **Enable Analytics**
-3. Install analytics package:
-```bash
-npm install @vercel/analytics
-```
-
-4. Add to `src/app/layout.tsx`:
-```typescript
-import { Analytics } from '@vercel/analytics/react'
-
-export default function RootLayout({ children }) {
-  return (
-    <html>
-      <body>
-        {children}
-        <Analytics />
-      </body>
-    </html>
-  )
-}
-```
-
-5. Commit and redeploy
-
-### Google Search Console
-
-1. Go to [search.google.com/search-console](https://search.google.com/search-console)
-2. Add your property (domain)
-3. Verify ownership via DNS or HTML file
-4. Submit your sitemap: `https://yourdomain.com/sitemap.xml`
-
-## Step 6: Monitoring & Maintenance
-
-### Monitor Errors
-
-- Check Vercel **Functions** tab for API route errors
-- Check Render/Railway logs for chatbot errors
-- Monitor Supabase **Logs** for database issues
-
-### Keep Dependencies Updated
-
-```bash
-# Check for outdated packages
-npm outdated
-
-# Update dependencies
-npm update
-
-# Update Next.js to latest
-npm install next@latest react@latest react-dom@latest
-```
-
-## Troubleshooting
-
-### Build Fails on Vercel
-
-- Check build logs in Vercel dashboard
-- Verify all environment variables are set
-- Try building locally: `npm run build`
-- Check for TypeScript errors: `npm run lint`
-
-### Chatbot Not Responding
-
-- Verify `NEXT_PUBLIC_AI_BOT_URL` is correct
-- Check chatbot deployment logs
-- Test chatbot directly: `curl https://your-bot-url.com/health`
-- Verify `GEMINI_API_KEY` is set in chatbot environment
-
-### Feedback Form Not Saving
-
-- Check browser console for errors
-- Verify Supabase environment variables
-- Check Supabase RLS (Row Level Security) policies
-- Test API route: `POST https://yourdomain.com/api/feedback`
-
-### Database Connection Issues
-
-- Verify `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- Check Supabase project status
-- Verify your IP isn't blocked (if using Prisma directly)
-
-## Performance Optimization Tips
-
-1. **Enable Vercel Edge Config** for faster global response times
-2. **Use Vercel Image Optimization** for images (already enabled with `next/image`)
-3. **Enable Compression** (Vercel does this automatically)
-4. **Add CDN caching headers** for static assets
-5. **Monitor Web Vitals** in Vercel Analytics
-
-## Security Best Practices
-
-- ✅ Never commit `.env.local` to git
-- ✅ Rotate API keys periodically
-- ✅ Enable Supabase RLS (Row Level Security)
-- ✅ Use HTTPS only (Vercel enforces this)
-- ✅ Implement rate limiting for API routes
-- ✅ Regularly update dependencies
-- ✅ Monitor for vulnerabilities: `npm audit`
-
-## Next Steps
-
-- Set up automated backups for Supabase
-- Implement email notifications for new feedback
-- Add admin authentication
-- Set up CI/CD with GitHub Actions
-- Configure preview deployments for testing
-
-## Resources
-
-- [Vercel Documentation](https://vercel.com/docs)
-- [Next.js Deployment](https://nextjs.org/docs/deployment)
-- [Supabase Production Checklist](https://supabase.com/docs/guides/platform/going-into-prod)
-- [Render Documentation](https://render.com/docs)
+Deploy your portfolio to Vercel with all features enabled: RAG AI, Auth, CMS, Analytics & Security.
 
 ---
 
-**Need Help?**
-- Check Vercel Support: [vercel.com/support](https://vercel.com/support)
-- Join Vercel Discord: [vercel.com/discord](https://vercel.com/discord)
-- Supabase Discord: [discord.supabase.com](https://discord.supabase.com/)
+## 📋 Pre-Deployment Checklist
+
+Before deploying, ensure you have:
+
+- ✅ Completed local setup (`LOCAL_SETUP_GUIDE.md`)
+- ✅ Tested all features locally
+- ✅ Supabase database configured with migrations
+- ✅ Google Gemini API key ready
+- ✅ Knowledge base initialized
+- ✅ All environment variables documented
+- ✅ Strong admin password set
+- ✅ Build passes locally: `npm run build`
+
+---
+
+## 🌐 Option 1: Deploy to Vercel (Recommended)
+
+Vercel is the platform built by the creators of Next.js. Best performance and zero configuration.
+
+### Step 1: Prepare Repository
+
+Ensure your code is pushed to GitHub:
+
+```bash
+# Check current status
+git status
+
+# Add all changes
+git add .
+
+# Commit if needed
+git commit -m "feat: Ready for production deployment"
+
+# Push to GitHub
+git push origin claude/portfolio-website-setup-011CV1uxpYytSxCHw13LXjCJ
+```
+
+### Step 2: Sign Up for Vercel
+
+1. Go to [vercel.com](https://vercel.com)
+2. Click "Sign Up"
+3. Choose "Continue with GitHub"
+4. Authorize Vercel to access your repositories
+
+### Step 3: Import Project
+
+1. Click "Add New..." → "Project"
+2. Find your repository: `PersonalPortfolio`
+3. Click "Import"
+4. **Framework Preset:** Next.js (auto-detected)
+5. **Root Directory:** `./` (leave as default)
+6. **Build Command:** `npm run build` (auto-filled)
+7. **Output Directory:** `.next` (auto-filled)
+
+### Step 4: Configure Environment Variables
+
+Click "Environment Variables" and add all variables from `.env.local`:
+
+#### Required Variables
+
+```env
+# Database
+NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+DATABASE_URL=postgresql://postgres:[PASSWORD]@db.xxxxx.supabase.co:5432/postgres
+
+# AI
+GEMINI_API_KEY=AIzaSy...
+
+# Authentication
+JWT_SECRET=your-128-character-hex-string
+ADMIN_EMAIL=admin@rameez.dev
+ADMIN_PASSWORD_HASH=$2a$10$...
+```
+
+#### Optional Variables
+
+```env
+# Rate Limiting (Recommended for production)
+UPSTASH_REDIS_REST_URL=https://xxxxx.upstash.io
+UPSTASH_REDIS_REST_TOKEN=xxxxx
+
+# Email Notifications (Optional - Phase 2 completion)
+RESEND_API_KEY=re_xxxxx
+
+# Python Bot Fallback (Optional)
+NEXT_PUBLIC_AI_BOT_URL=https://your-python-bot.com
+```
+
+**Important:**
+- Copy values exactly (no quotes needed)
+- Mark sensitive values (JWT_SECRET, API keys) as "Sensitive"
+- Apply to: Production, Preview, and Development
+
+### Step 5: Deploy
+
+1. Click "Deploy"
+2. Wait 2-5 minutes for build
+3. Watch build logs for any errors
+
+**Expected Result:**
+```
+✓ Compiled successfully
+✓ Linting and checking validity of types
+✓ Collecting page data
+✓ Generating static pages
+✓ Finalizing page optimization
+✓ Build completed successfully
+```
+
+### Step 6: Get Your Domain
+
+After deployment succeeds:
+
+1. Vercel assigns a URL: `https://your-portfolio-xxxxx.vercel.app`
+2. Click "Visit" to see your live site
+3. Test all features
+
+---
+
+## 🔧 Post-Deployment Configuration
+
+### 1. Update Supabase CORS
+
+Allow your Vercel domain to access Supabase:
+
+1. Go to Supabase Dashboard → Settings → API
+2. Scroll to "CORS"
+3. Add your Vercel domain: `https://your-portfolio-xxxxx.vercel.app`
+4. Save
+
+### 2. Initialize Knowledge Base (Production)
+
+```bash
+# Replace with your actual Vercel URL
+curl -X POST https://your-portfolio-xxxxx.vercel.app/api/knowledge/init
+```
+
+Expected response:
+```json
+{
+  "success": true,
+  "message": "Knowledge base initialized with X items",
+  "count": X
+}
+```
+
+### 3. Test Admin Login
+
+1. Go to: `https://your-portfolio-xxxxx.vercel.app/admin/login`
+2. Enter your admin credentials
+3. Should redirect to dashboard
+4. Test creating/editing projects
+
+### 4. Test RAG Chatbot
+
+1. Navigate to homepage
+2. Open chatbot
+3. Ask: "What are Rameez's skills?"
+4. Should receive contextual response from knowledge base
+
+### 5. Verify Security Headers
+
+Open browser DevTools → Network → Reload page → Check headers:
+
+✅ `Strict-Transport-Security`
+✅ `X-Frame-Options`
+✅ `X-Content-Type-Options`
+✅ `X-XSS-Protection`
+✅ `Referrer-Policy`
+✅ `Permissions-Policy`
+
+### 6. Test Analytics
+
+1. Visit different pages
+2. Go to `/admin` (logged in)
+3. View Analytics section
+4. Should see page visits tracked
+
+---
+
+## 🌍 Custom Domain Setup (Optional)
+
+### Step 1: Purchase Domain
+
+Buy a domain from:
+- Namecheap
+- GoDaddy
+- Google Domains
+- Cloudflare
+
+**Recommended:** `rameez.dev`, `rameezbader.com`, or similar
+
+### Step 2: Add Domain to Vercel
+
+1. In Vercel project → Settings → Domains
+2. Click "Add Domain"
+3. Enter your domain: `rameez.dev`
+4. Click "Add"
+
+### Step 3: Configure DNS
+
+Vercel will show you DNS records to add:
+
+**Option A: Using Nameservers (Recommended)**
+1. Copy Vercel's nameservers
+2. Update at your domain registrar
+3. Wait 24-48 hours for propagation
+
+**Option B: Using A/CNAME Records**
+1. Add A record: `@ → 76.76.21.21`
+2. Add CNAME: `www → cname.vercel-dns.com`
+3. Wait 1-2 hours for propagation
+
+### Step 4: Enable SSL
+
+1. Vercel auto-generates SSL certificate
+2. Usually ready in 5-10 minutes
+3. Site becomes accessible via `https://rameez.dev`
+
+### Step 5: Update Environment
+
+Update these in Vercel settings:
+
+1. **Supabase CORS:** Add custom domain
+2. **Metadata:** Update `metadataBase` in `layout.tsx`
+
+```typescript
+metadataBase: new URL("https://rameez.dev"),
+```
+
+Redeploy after changes.
+
+---
+
+## 🔄 Continuous Deployment
+
+Vercel automatically redeploys on every git push:
+
+```bash
+# Make changes locally
+git add .
+git commit -m "feat: Add new feature"
+git push origin main
+
+# Vercel auto-deploys in ~2 minutes
+```
+
+**Preview Deployments:**
+- Every branch gets a preview URL
+- Test before merging to main
+- Example: `https://portfolio-git-feature-username.vercel.app`
+
+---
+
+## 📊 Monitoring & Analytics
+
+### Vercel Analytics (Built-in)
+
+1. Go to Vercel project → Analytics
+2. See:
+   - Page views
+   - Unique visitors
+   - Top pages
+   - Performance metrics
+
+### Supabase Monitoring
+
+1. Go to Supabase Dashboard → Database
+2. Monitor:
+   - Query performance
+   - Storage usage
+   - Connection count
+
+### Custom Analytics (Phase 4)
+
+Your built-in analytics at `/admin`:
+- Page visit tracking
+- Device breakdown
+- Referrer sources
+- Real-time insights
+
+---
+
+## 🛡️ Security Best Practices
+
+### 1. Environment Variables
+
+- ✅ Never commit `.env.local` to git
+- ✅ Use strong JWT_SECRET (128+ characters)
+- ✅ Rotate admin password regularly
+- ✅ Mark all secrets as "Sensitive" in Vercel
+
+### 2. Database Security
+
+- ✅ Enable Row Level Security (RLS) on all tables
+- ✅ Use Supabase service role key only server-side
+- ✅ Never expose DATABASE_URL to client
+- ✅ Regular backups (Supabase auto-backups daily)
+
+### 3. Rate Limiting
+
+- ✅ Set up Upstash Redis for production
+- ✅ Monitor rate limit hits in logs
+- ✅ Adjust limits based on traffic
+
+### 4. API Keys
+
+- ✅ Restrict Gemini API key to your domain
+- ✅ Monitor API usage in Google Cloud Console
+- ✅ Set up billing alerts
+
+---
+
+## 🚨 Troubleshooting Deployment
+
+### Build Fails on Vercel
+
+**Error:** "Failed to fetch fonts from Google Fonts"
+
+**Solution:** Google Fonts usually works on Vercel. If not, see `FONT_LOADING_FIX.md`.
+
+**Error:** "Module not found"
+
+**Solution:**
+1. Check all imports use correct paths
+2. Verify all dependencies in `package.json`
+3. Clear build cache: Settings → General → Clear Cache
+
+### Runtime Errors
+
+**Error:** "Database connection failed"
+
+**Solution:**
+1. Verify DATABASE_URL is correct
+2. Check Supabase project is active
+3. Test connection from local with same URL
+
+**Error:** "Unauthorized" on API routes
+
+**Solution:**
+1. Check JWT_SECRET matches in environment
+2. Clear cookies and login again
+3. Verify admin password hash is correct
+
+### Performance Issues
+
+**Slow API responses**
+
+**Solution:**
+1. Check Supabase region (choose closest to users)
+2. Add database indexes (already done in migrations)
+3. Enable Vercel Edge Functions for specific routes
+
+**High Gemini API costs**
+
+**Solution:**
+1. Implement caching for similar questions
+2. Adjust RAG threshold (increase from 0.7 to 0.8)
+3. Monitor usage in Google Cloud Console
+
+---
+
+## 📈 Scaling Considerations
+
+### Traffic Growth
+
+**0-1K visitors/month:**
+- ✅ Current setup is perfect
+- Free tiers sufficient
+
+**1K-10K visitors/month:**
+- Set up Upstash Redis (distributed rate limiting)
+- Consider Supabase Pro ($25/mo)
+- Monitor API usage
+
+**10K+ visitors/month:**
+- Upgrade to Vercel Pro ($20/mo)
+- Supabase Pro or Scale plan
+- Implement response caching
+- CDN for static assets
+
+### Database Growth
+
+Monitor Supabase storage:
+- **Free tier:** 500 MB
+- **Pro tier:** 8 GB
+
+**Optimization tips:**
+1. Archive old analytics data (>90 days)
+2. Compress chat message embeddings
+3. Delete unused correction data
+
+---
+
+## 🎯 Production Checklist
+
+Before going live:
+
+- [ ] All environment variables set in Vercel
+- [ ] Database migrations run in Supabase
+- [ ] Knowledge base initialized on production
+- [ ] Admin login tested
+- [ ] RAG chatbot tested
+- [ ] Security headers verified
+- [ ] Analytics tracking works
+- [ ] Rate limiting tested
+- [ ] Custom domain configured (optional)
+- [ ] SSL certificate active
+- [ ] Error tracking set up (Sentry optional)
+- [ ] Backup plan documented
+
+---
+
+## 🔄 Maintenance
+
+### Weekly
+- Check error logs in Vercel
+- Monitor API usage (Gemini, Supabase)
+- Review analytics data
+
+### Monthly
+- Rotate admin password
+- Review and archive old data
+- Check security updates
+- Update dependencies: `npm update`
+
+### Quarterly
+- Review and optimize database indexes
+- Analyze chatbot performance
+- Update knowledge base with new info
+- Security audit
+
+---
+
+## 📚 Additional Resources
+
+- [Vercel Documentation](https://vercel.com/docs)
+- [Next.js Deployment](https://nextjs.org/docs/deployment)
+- [Supabase Production Guide](https://supabase.com/docs/guides/platform/going-into-prod)
+- [Google Gemini API Limits](https://ai.google.dev/pricing)
+
+---
+
+## 🎉 Congratulations!
+
+Your portfolio is now live! Features deployed:
+
+- ✅ Professional design with 3D graphics
+- ✅ RAG-powered AI chatbot
+- ✅ Secure admin authentication
+- ✅ Content management system
+- ✅ Analytics tracking
+- ✅ Enterprise-level security
+- ✅ Optimized performance
+
+**Share your portfolio:**
+- LinkedIn
+- GitHub README
+- Resume
+- Job applications
+- Twitter/X
+
+**You now have a portfolio that showcases world-class engineering skills!** 🚀
+
+---
+
+**Questions or Issues?**
+- Check Vercel logs: Project → Deployments → Click deployment → View Function Logs
+- Review Supabase logs: Dashboard → Logs
+- Test locally first: `npm run dev`
+
+**Built with ❤️ and deployed to the world!**
