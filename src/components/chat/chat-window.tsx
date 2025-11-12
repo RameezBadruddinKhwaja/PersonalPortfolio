@@ -89,7 +89,7 @@ export default function ChatWindow({ onClose }: { onClose: () => void }) {
       {/* Header */}
       <div className="flex items-center justify-between border-b border-border bg-muted/50 px-4 py-3 rounded-t-lg">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center text-white text-xl">
+          <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center text-white text-xl">
             🤖
           </div>
           <div>
@@ -124,7 +124,7 @@ export default function ChatWindow({ onClose }: { onClose: () => void }) {
               <div
                 className={`max-w-[85%] rounded-lg px-4 py-2 ${
                   m.from === "user"
-                    ? "bg-blue-600 text-white"
+                    ? "bg-primary text-white"
                     : "bg-muted text-foreground"
                 }`}
               >

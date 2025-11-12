@@ -33,7 +33,7 @@ export function MainNav() {
         <div className="flex items-center">
           <Link href="/" className="font-bold text-xl group">
             <span className="text-foreground">Rameez</span>
-            <span className="text-blue-600 group-hover:text-blue-500 transition-colors">.dev</span>
+            <span className="text-primary group-hover:opacity-80 transition-opacity">.dev</span>
           </Link>
         </div>
 
@@ -43,9 +43,9 @@ export function MainNav() {
             <Link
               key={item.href}
               href={item.href}
-              className={`transition-colors hover:text-blue-600 relative ${
+              className={`transition-colors hover:text-primary relative ${
                 isActive(item.href)
-                  ? "text-blue-600 font-semibold"
+                  ? "text-primary font-semibold"
                   : "text-foreground/60"
               }`}
             >
@@ -53,7 +53,7 @@ export function MainNav() {
               {isActive(item.href) && (
                 <motion.div
                   layoutId="activeNav"
-                  className="absolute -bottom-[21px] left-0 right-0 h-0.5 bg-blue-600"
+                  className="absolute -bottom-[21px] left-0 right-0 h-0.5 bg-primary"
                   initial={false}
                   transition={{ type: "spring", stiffness: 380, damping: 30 }}
                 />
@@ -97,7 +97,7 @@ export function MainNav() {
                   onClick={() => setMobileMenuOpen(false)}
                   className={`text-sm font-medium py-2 px-4 rounded-md transition-colors ${
                     isActive(item.href)
-                      ? "bg-blue-600 text-white"
+                      ? "bg-primary text-white"
                       : "text-foreground/60 hover:bg-muted hover:text-foreground"
                   }`}
                 >

@@ -21,7 +21,7 @@ export default function NotFound() {
           transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
           className="relative"
         >
-          <h1 className="text-9xl font-bold text-blue-600/20">404</h1>
+          <h1 className="text-9xl font-bold text-primary/20">404</h1>
           <p className="absolute inset-0 flex items-center justify-center text-2xl font-semibold text-foreground">
             Page Not Found
           </p>
@@ -74,21 +74,21 @@ export default function NotFound() {
           <div className="flex flex-wrap gap-2 justify-center">
             <Link
               href="/about"
-              className="text-sm text-blue-600 hover:underline"
+              className="text-sm text-primary hover:underline"
             >
               About
             </Link>
             <span className="text-muted-foreground">•</span>
             <Link
               href="/projects"
-              className="text-sm text-blue-600 hover:underline"
+              className="text-sm text-primary hover:underline"
             >
               Projects
             </Link>
             <span className="text-muted-foreground">•</span>
             <Link
               href="/feedback"
-              className="text-sm text-blue-600 hover:underline"
+              className="text-sm text-primary hover:underline"
             >
               Contact
             </Link>
