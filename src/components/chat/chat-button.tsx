@@ -13,7 +13,7 @@ export function ChatButton() {
     <div>
       <motion.button
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 left-6 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg hover:shadow-xl transition-shadow"
+        className="fixed bottom-6 left-6 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-lg hover:shadow-xl transition-shadow"
         aria-label="Open chat"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}

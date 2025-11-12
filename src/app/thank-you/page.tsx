@@ -73,7 +73,7 @@ export default function ThankYouPage() {
         >
           <p className="text-xs text-muted-foreground">
             Want to chat? Try{" "}
-            <span className="font-semibold text-blue-600">RameezBot</span> at the
+            <span className="font-semibold text-primary">RameezBot</span> at the
             bottom-left corner!
           </p>
         </motion.div>

@@ -14,11 +14,11 @@ export function ProjectCard({ project }: { project: any }) {
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
       whileHover={{ y: -5 }}
-      className="group rounded-lg border bg-card p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:border-blue-600/50 flex flex-col h-full"
+      className="group rounded-lg border bg-card p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:border-primary/50 flex flex-col h-full"
     >
       <div className="flex-1 space-y-4">
         <div>
-          <h3 className="text-xl font-semibold group-hover:text-blue-600 transition-colors">
+          <h3 className="text-xl font-semibold group-hover:text-primary transition-colors">
             {project.title}
           </h3>
           <p className="text-sm text-muted-foreground mt-2 leading-relaxed">

@@ -12,7 +12,7 @@ export function Footer() {
           <div className="space-y-3">
             <Link href="/" className="font-bold text-xl inline-block">
               <span className="text-foreground">Rameez</span>
-              <span className="text-blue-600">.dev</span>
+              <span className="text-primary">.dev</span>
             </Link>
             <p className="text-sm text-muted-foreground max-w-xs">
               Building intelligent, modern, and responsive web experiences using Next.js,
@@ -27,7 +27,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/about"
-                  className="text-muted-foreground hover:text-blue-600 transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   About
                 </Link>
@@ -35,7 +35,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/projects"
-                  className="text-muted-foreground hover:text-blue-600 transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Projects
                 </Link>
@@ -43,7 +43,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/feedback"
-                  className="text-muted-foreground hover:text-blue-600 transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Feedback
                 </Link>
@@ -51,7 +51,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/admin"
-                  className="text-muted-foreground hover:text-blue-600 transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Admin
                 </Link>
@@ -64,17 +64,17 @@ export function Footer() {
             <h3 className="font-semibold text-sm">Get in Touch</h3>
             <div className="space-y-3 text-sm">
               <div className="flex items-center gap-2 text-muted-foreground">
-                <Mail className="h-4 w-4 text-blue-600" />
+                <Mail className="h-4 w-4 text-primary" />
                 <a
                   href="mailto:rameezbaderkhwaja@gmail.com"
-                  className="hover:text-blue-600 transition-colors"
+                  className="hover:text-primary transition-colors"
                 >
                   rameezbaderkhwaja@gmail.com
                 </a>
               </div>
 
               <div className="flex items-center gap-2 text-muted-foreground">
-                <MapPin className="h-4 w-4 text-blue-600" />
+                <MapPin className="h-4 w-4 text-primary" />
                 <span>Karachi, Pakistan</span>
               </div>
 
@@ -83,7 +83,7 @@ export function Footer() {
                   href="https://github.com/RameezBader"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-blue-600 transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors"
                   aria-label="GitHub"
                 >
                   <Github className="h-5 w-5" />
@@ -92,7 +92,7 @@ export function Footer() {
                   href="https://linkedin.com/in/rameezbaderkhwaja"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-blue-600 transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors"
                   aria-label="LinkedIn"
                 >
                   <Linkedin className="h-5 w-5" />
