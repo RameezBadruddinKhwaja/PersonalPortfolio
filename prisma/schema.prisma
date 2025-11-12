@@ -27,7 +27,11 @@ model Project {
   tech        String[]
   live        String?
   repo        String?
+  image_url   String?
+  featured    Boolean  @default(false)
+  display_order Int?
   created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
 
   @@map("projects")
 }
@@ -80,4 +84,32 @@ model KnowledgeBase {
 
   @@index([category])
   @@map("knowledge_base")
+}
+
+model CMSContent {
+  id         String   @id @default(cuid())
+  key        String   @unique // e.g., "hero.title", "about.description"
+  value      String   // Content value
+  category   String?  // e.g., "hero", "about", "contact"
+  type       String   @default("text") // "text", "markdown", "json", "image_url"
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([category])
+  @@map("cms_content")
+}
+
+model Analytics {
+  id         String   @id @default(cuid())
+  page       String   // Page visited
+  referrer   String?  // Referrer URL
+  user_agent String?  // Browser info
+  ip_address String?  // User IP
+  country    String?  // Geo location
+  device     String?  // mobile/desktop/tablet
+  timestamp  DateTime @default(now())
+
+  @@index([page])
+  @@index([timestamp])
+  @@map("analytics")
 }
