@@ -1,8 +1,11 @@
 "use client"
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase/client'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { LogOut } from 'lucide-react'
 
 interface Feedback {
   id: string
@@ -18,6 +21,7 @@ interface Feedback {
 export default function AdminPage() {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([])
   const [loading, setLoading] = useState(true)
+  const router = useRouter()
 
   useEffect(() => {
     async function load() {
@@ -32,13 +36,36 @@ export default function AdminPage() {
     load()
   }, [])
 
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' })
+      router.push('/admin/login')
+      router.refresh()
+    } catch (error) {
+      console.error('Logout failed:', error)
+    }
+  }
+
   return (
     <div className="container px-4 md:px-6 py-8 md:py-12">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
-        <p className="text-muted-foreground mb-8">
-          Manage feedback submissions and view analytics
-        </p>
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
+            <p className="text-muted-foreground">
+              Manage feedback submissions and view analytics
+            </p>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleLogout}
+            className="flex items-center gap-2"
+          >
+            <LogOut className="h-4 w-4" />
+            Logout
+          </Button>
+        </div>
 
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
