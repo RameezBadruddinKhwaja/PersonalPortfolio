@@ -82,7 +82,7 @@ export function Skills() {
             variants={item}
             className="space-y-4"
           >
-            <h3 className="text-xl font-semibold text-blue-600">
+            <h3 className="text-xl font-semibold text-primary">
               {category.category}
             </h3>
             <ul className="space-y-2">

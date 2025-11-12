@@ -40,7 +40,7 @@ export function AboutHero() {
           intelligent, scalable, and interactive applications.
         </p>
 
-        <blockquote className="border-l-4 border-blue-600 pl-4 italic mt-6">
+        <blockquote className="border-l-4 border-primary pl-4 italic mt-6">
           "Technology isn't just about solving problems — it's about crafting experiences that feel alive."
         </blockquote>
 
@@ -48,27 +48,27 @@ export function AboutHero() {
           <h3 className="text-xl font-semibold mb-3 text-foreground">Hobbies & Interests</h3>
           <ul className="space-y-2">
             <li className="flex items-start gap-2">
-              <span className="text-blue-600 mt-1">▸</span>
+              <span className="text-primary mt-1">▸</span>
               <span>Building interactive UIs with Next.js + Tailwind</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-blue-600 mt-1">▸</span>
+              <span className="text-primary mt-1">▸</span>
               <span>Exploring Agentic AI (OpenAI & Gemini APIs)</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-blue-600 mt-1">▸</span>
+              <span className="text-primary mt-1">▸</span>
               <span>Working with Express.js, Prisma & PostgreSQL</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-blue-600 mt-1">▸</span>
+              <span className="text-primary mt-1">▸</span>
               <span>Cloud deployments (Vercel, Render, etc.)</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-blue-600 mt-1">▸</span>
+              <span className="text-primary mt-1">▸</span>
               <span>Cybersecurity fundamentals</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-blue-600 mt-1">▸</span>
+              <span className="text-primary mt-1">▸</span>
               <span>Learning new frameworks and architectural patterns</span>
             </li>
           </ul>

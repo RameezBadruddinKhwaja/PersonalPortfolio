@@ -103,7 +103,7 @@ export default function AdminPage() {
                               href={fb.linkedin}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-blue-600 hover:underline"
+                              className="text-primary hover:underline"
                             >
                               LinkedIn Profile
                             </a>
