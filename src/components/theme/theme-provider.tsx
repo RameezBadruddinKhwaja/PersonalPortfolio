@@ -1,3 +1,5 @@
+"use client"
+
 import { createContext, useContext, useEffect, useState } from "react"
 
 type Theme = "dark" | "light" | "system"
@@ -32,13 +34,19 @@ export function ThemeProvider({
   disableTransitionOnChange = false,
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-  )
+  const [theme, setTheme] = useState<Theme>(defaultTheme)
+
+  useEffect(() => {
+    // Load theme from localStorage on mount (client-side only)
+    const storedTheme = localStorage.getItem(storageKey) as Theme
+    if (storedTheme) {
+      setTheme(storedTheme)
+    }
+  }, [storageKey])
 
   useEffect(() => {
     const root = window.document.documentElement
-    const isDark = theme === "dark" || 
+    const isDark = theme === "dark" ||
       (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
 
     root.classList.remove("light", "dark")
@@ -50,7 +58,7 @@ export function ThemeProvider({
         root.style.removeProperty("transition")
       }, 0)
     }
-  }, [theme])
+  }, [theme, disableTransitionOnChange])
 
   const value = {
     theme,

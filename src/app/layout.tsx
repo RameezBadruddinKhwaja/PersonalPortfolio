@@ -1,22 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { MainNav } from "@/components/nav/main-nav";
 import { Footer } from "@/components/footer/footer";
 import { ChatButton } from "@/components/chat/chat-button";
-
-const inter = Inter({ 
-  subsets: ["latin"], 
-  variable: "--font-inter" 
-});
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-poppins"
-});
 
 export const metadata: Metadata = {
   title: {
@@ -100,11 +88,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn(
-        "min-h-screen bg-background font-sans antialiased",
-        inter.variable,
-        poppins.variable
-      )}>
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased"
+        )}
+        suppressHydrationWarning
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

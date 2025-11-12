@@ -90,7 +90,7 @@ export default function AdminPage() {
                       <div className="flex items-center gap-2 mb-2">
                         <p className='font-semibold text-lg'>{fb.name}</p>
                         {fb.country && (
-                          <Badge variant="secondary">{fb.country}</Badge>
+                          <Badge>{fb.country}</Badge>
                         )}
                       </div>
 

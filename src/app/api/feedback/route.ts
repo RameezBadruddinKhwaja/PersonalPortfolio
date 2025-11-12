@@ -38,7 +38,7 @@ export async function POST(req: Request) {
   } catch (err) {
     console.error(err)
     if (err instanceof z.ZodError) {
-      return NextResponse.json({ error: err.errors }, { status: 400 })
+      return NextResponse.json({ error: err.issues }, { status: 400 })
     }
     return NextResponse.json({ error: "Invalid request" }, { status: 400 })
   }

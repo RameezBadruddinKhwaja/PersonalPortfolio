@@ -1,3 +1,5 @@
+"use client"
+
 import { motion } from "framer-motion"
 import { ProjectCard } from "@/components/ui/project-card"
 import { projects } from "@/lib/data/projects"
