@@ -32,11 +32,52 @@ model Project {
   @@map("projects")
 }
 
-model ChatMessage {
+model ChatSession {
   id         String   @id @default(cuid())
+  session_id String   @unique
+  user_ip    String?
+  user_agent String?
+  started_at DateTime @default(now())
+  ended_at   DateTime?
+  messages   ChatMessage[]
+
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  id           String      @id @default(cuid())
+  session_id   String
+  session      ChatSession @relation(fields: [session_id], references: [session_id], onDelete: Cascade)
   user_message String
   bot_reply    String
-  created_at DateTime @default(now())
+  embedding    String?     // JSON string of vector embedding
+  context_used String?     // Context retrieved from RAG
+  created_at   DateTime    @default(now())
 
+  @@index([session_id])
   @@map("chat_messages")
+}
+
+model AICorrection {
+  id              String   @id @default(cuid())
+  wrong_response  String
+  correct_response String
+  user_feedback   String?
+  context         String?
+  created_at      DateTime @default(now())
+
+  @@map("ai_corrections")
+}
+
+model KnowledgeBase {
+  id         String   @id @default(cuid())
+  content    String
+  embedding  String?  // JSON string of vector embedding
+  category   String?  // e.g., "about", "projects", "skills"
+  metadata   String?  // JSON string with additional info
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([category])
+  @@map("knowledge_base")
 }
