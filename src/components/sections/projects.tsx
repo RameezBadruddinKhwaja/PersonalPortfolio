@@ -1,23 +1,25 @@
 "use client"
 
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useState, useRef } from "react"
+import { motion, AnimatePresence, useInView } from "framer-motion"
 import { ProjectCard } from "@/components/ui/project-card"
 import { projects, categories, ProjectCategory } from "@/lib/data/projects"
 import { Button } from "@/components/ui/button"
 
 export function ProjectsSection() {
   const [activeCategory, setActiveCategory] = useState<ProjectCategory>("all")
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: "-50px" })
 
   const filteredProjects = activeCategory === "all"
     ? projects
     : projects.filter(p => p.category === activeCategory)
 
   return (
-    <section className="space-y-8">
+    <section className="space-y-8" ref={ref}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 0.5 }}
       >
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
@@ -31,7 +33,7 @@ export function ProjectsSection() {
       {/* Category Filter */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
         transition={{ duration: 0.5, delay: 0.1 }}
         className="flex flex-wrap gap-2"
       >

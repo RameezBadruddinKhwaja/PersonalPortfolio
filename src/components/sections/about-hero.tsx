@@ -1,13 +1,19 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { useRef } from "react"
+import { motion, useInView } from "framer-motion"
 
 export function AboutHero() {
+  const ref = useRef(null)
+  const hobbiesRef = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: "-50px" })
+  const hobbiesInView = useInView(hobbiesRef, { once: true, margin: "-50px" })
+
   return (
-    <section className="space-y-6">
+    <section className="space-y-6" ref={ref}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 0.5 }}
       >
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
@@ -20,7 +26,7 @@ export function AboutHero() {
 
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        animate={isInView ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
         className="text-lg text-muted-foreground space-y-4"
       >
@@ -55,37 +61,36 @@ export function AboutHero() {
           "Technology isn't just about solving problems — it's about crafting experiences that feel alive."
         </blockquote>
 
-        <div className="mt-8">
-          <h3 className="text-xl font-semibold mb-3 text-foreground">Hobbies & Interests</h3>
+        <div className="mt-8" ref={hobbiesRef}>
+          <motion.h3
+            className="text-xl font-semibold mb-3 text-foreground"
+            initial={{ opacity: 0, y: 10 }}
+            animate={hobbiesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+            transition={{ duration: 0.4 }}
+          >
+            Hobbies & Interests
+          </motion.h3>
           <ul className="space-y-2">
-            <li className="flex items-start gap-2">
-              <span className="text-primary mt-1">▸</span>
-              <span>Building interactive UIs with Next.js + Tailwind</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-primary mt-1">▸</span>
-              <span>Exploring Agentic AI (OpenAI & Gemini APIs)</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-primary mt-1">▸</span>
-              <span>Working with Express.js, Prisma & PostgreSQL</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-primary mt-1">▸</span>
-              <span>Cloud deployments (Vercel, Render, etc.)</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-primary mt-1">▸</span>
-              <span>Cybersecurity: SIEM tools, threat hunting, incident response</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-primary mt-1">▸</span>
-              <span>Penetration testing & vulnerability assessment</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-primary mt-1">▸</span>
-              <span>Learning new frameworks and architectural patterns</span>
-            </li>
+            {[
+              "Building interactive UIs with Next.js + Tailwind",
+              "Exploring Agentic AI (OpenAI & Gemini APIs)",
+              "Working with Express.js, Prisma & PostgreSQL",
+              "Cloud deployments (Vercel, Render, etc.)",
+              "Cybersecurity: SIEM tools, threat hunting, incident response",
+              "Penetration testing & vulnerability assessment",
+              "Learning new frameworks and architectural patterns",
+            ].map((hobby, index) => (
+              <motion.li
+                key={index}
+                className="flex items-start gap-2"
+                initial={{ opacity: 0, x: -20 }}
+                animate={hobbiesInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+              >
+                <span className="text-primary mt-1">▸</span>
+                <span>{hobby}</span>
+              </motion.li>
+            ))}
           </ul>
         </div>
       </motion.div>

@@ -1,6 +1,7 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { useRef } from "react"
+import { motion, useInView } from "framer-motion"
 
 const skills = [
   {
@@ -61,11 +62,14 @@ const item = {
 }
 
 export function Skills() {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: "-100px" })
+
   return (
-    <section className="mt-16 md:mt-24">
+    <section className="mt-16 md:mt-24" ref={ref}>
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 0.5 }}
         className="text-2xl font-bold tracking-tight sm:text-3xl mb-10"
       >
@@ -75,7 +79,7 @@ export function Skills() {
       <motion.div
         variants={container}
         initial="hidden"
-        animate="show"
+        animate={isInView ? "show" : "hidden"}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
       >
         {skills.map((category) => (
