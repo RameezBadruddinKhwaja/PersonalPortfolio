@@ -1,8 +1,17 @@
+import OpenAI from "openai"
 import { GoogleGenerativeAI } from "@google/generative-ai"
 import { retrieveContext, searchChatHistory } from "@/lib/rag/knowledge-base"
 import { generateEmbedding, stringifyEmbedding } from "@/lib/ai/embeddings"
 import { supabase } from "@/lib/supabase/client"
 
+// OpenAI SDK client (can be configured for different providers)
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY || process.env.GEMINI_API_KEY || "",
+  // Use OpenAI-compatible endpoint for Gemini if using Google
+  baseURL: process.env.OPENAI_BASE_URL || "https://api.openai.com/v1",
+})
+
+// Fallback to Google Generative AI if no OpenAI key
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "")
 
 export interface ChatResponse {
@@ -11,8 +20,11 @@ export interface ChatResponse {
   sessionId?: string
 }
 
+// Determine which provider to use
+const useOpenAI = Boolean(process.env.OPENAI_API_KEY)
+
 /**
- * Generate AI response using RAG
+ * Generate AI response using RAG with OpenAI SDK or Gemini
  */
 export async function generateRAGResponse(
   userMessage: string,
@@ -31,15 +43,13 @@ export async function generateRAGResponse(
       .map((chat) => `User: ${chat.userMessage}\nBot: ${chat.botReply}`)
       .join("\n\n")
 
-    // Step 4: Create enhanced prompt with context
-    const prompt = `You are RameezBot, an AI assistant for Rameez Bader Khwaja's portfolio website.
+    // Step 4: Create system prompt and messages
+    const systemPrompt = `You are RameezBot, an AI assistant for Rameez Bader Khwaja's portfolio website.
 
 Context from knowledge base:
 ${contextStr || "No specific context found."}
 
 ${chatHistoryStr ? `Similar past conversations:\n${chatHistoryStr}\n` : ""}
-
-User question: ${userMessage}
 
 Instructions:
 - Answer based on the context provided above
@@ -47,15 +57,31 @@ Instructions:
 - If you don't know something from the context, say so honestly
 - Keep responses concise (2-3 paragraphs max)
 - Use the information from past conversations if relevant
-- Maintain Rameez's voice and personality
+- Maintain Rameez's voice and personality`
 
-Your response:`
+    let reply: string
 
-    // Step 5: Generate response using Gemini
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" })
-    const result = await model.generateContent(prompt)
-    const response = result.response
-    const reply = response.text()
+    // Step 5: Generate response using OpenAI SDK or Gemini
+    if (useOpenAI) {
+      // Use OpenAI SDK (works with OpenAI, Azure, or any OpenAI-compatible API)
+      const completion = await openai.chat.completions.create({
+        model: process.env.OPENAI_MODEL || "gpt-3.5-turbo",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userMessage },
+        ],
+        temperature: 0.7,
+        max_tokens: 500,
+      })
+      reply = completion.choices[0]?.message?.content || ""
+    } else {
+      // Fallback to Gemini
+      const prompt = `${systemPrompt}\n\nUser question: ${userMessage}\n\nYour response:`
+      const model = genAI.getGenerativeModel({ model: "gemini-pro" })
+      const result = await model.generateContent(prompt)
+      const response = result.response
+      reply = response.text()
+    }
 
     // Step 6: Generate embedding for this conversation
     const embedding = await generateEmbedding(userMessage)
