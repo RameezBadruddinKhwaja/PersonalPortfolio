@@ -1,8 +1,11 @@
-import jwt from "jsonwebtoken"
+import { SignJWT, jwtVerify } from "jose"
 import { cookies } from "next/headers"
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-in-production"
 const JWT_EXPIRES_IN = "7d" // 7 days
+
+// Convert secret to Uint8Array for jose
+const getSecretKey = () => new TextEncoder().encode(JWT_SECRET)
 
 export interface JWTPayload {
   userId: string
@@ -12,16 +15,20 @@ export interface JWTPayload {
   exp?: number
 }
 
-export function signToken(payload: Omit<JWTPayload, "iat" | "exp">): string {
-  return jwt.sign(payload, JWT_SECRET, {
-    expiresIn: JWT_EXPIRES_IN,
-  })
+export async function signToken(payload: Omit<JWTPayload, "iat" | "exp">): Promise<string> {
+  const token = await new SignJWT(payload as any)
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime(JWT_EXPIRES_IN)
+    .sign(getSecretKey())
+
+  return token
 }
 
-export function verifyToken(token: string): JWTPayload | null {
+export async function verifyToken(token: string): Promise<JWTPayload | null> {
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as JWTPayload
-    return decoded
+    const { payload } = await jwtVerify(token, getSecretKey())
+    return payload as JWTPayload
   } catch (error) {
     console.error("JWT verification failed:", error)
     return null
