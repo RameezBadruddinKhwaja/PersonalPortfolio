@@ -103,7 +103,7 @@ export async function POST(req: NextRequest) {
     console.error("Chat API error:", err)
 
     if (err instanceof z.ZodError) {
-      return NextResponse.json({ error: err.errors }, { status: 400 })
+      return NextResponse.json({ error: err.issues }, { status: 400 })
     }
 
     // Fallback response when AI bot is unavailable
