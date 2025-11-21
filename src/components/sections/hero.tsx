@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { EnergyRing } from "@/components/3d/energy-ring";
+import { Github, Linkedin, Mail } from "lucide-react";
 
 export function Hero() {
   return (
@@ -59,11 +60,45 @@ export function Hero() {
         </Link>
       </motion.div>
 
+      {/* Social Links */}
+      <motion.div
+        className="flex gap-6 justify-center items-center mt-8 relative z-10"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.8 }}
+      >
+        <a
+          href="https://github.com/RameezBadruddinKhwaja"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-full hover:bg-muted"
+          aria-label="GitHub"
+        >
+          <Github className="h-6 w-6" />
+        </a>
+        <a
+          href="https://linkedin.com/in/rameezbaderkhwaja"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-full hover:bg-muted"
+          aria-label="LinkedIn"
+        >
+          <Linkedin className="h-6 w-6" />
+        </a>
+        <a
+          href="mailto:rameezbaderkhwaja@gmail.com"
+          className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-full hover:bg-muted"
+          aria-label="Email"
+        >
+          <Mail className="h-6 w-6" />
+        </a>
+      </motion.div>
+
       <motion.p
-        className="text-sm text-muted-foreground mt-12 relative z-10"
+        className="text-sm text-muted-foreground mt-8 relative z-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.8 }}
+        transition={{ duration: 0.5, delay: 1.0 }}
       >
         Turning ideas into interactive digital reality
       </motion.p>

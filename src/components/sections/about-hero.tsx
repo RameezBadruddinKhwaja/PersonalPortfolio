@@ -42,6 +42,15 @@ export function AboutHero() {
           intelligent, scalable, and interactive applications.
         </p>
 
+        <p>
+          I'm also a <span className="text-primary font-semibold">cybersecurity learner</span> and
+          aspiring <span className="text-primary font-semibold">SOC Analyst</span>. My focus areas include
+          network security, incident response, log analysis, SIEM tools, threat detection, and
+          understanding vulnerabilities. I actively practice through hands-on labs, real-world
+          attack scenarios, and defensive techniques. My goal is to provide secure systems,
+          safe environments, and reliable digital protection.
+        </p>
+
         <blockquote className="border-l-4 border-primary pl-4 italic mt-6">
           "Technology isn't just about solving problems — it's about crafting experiences that feel alive."
         </blockquote>
@@ -67,7 +76,11 @@ export function AboutHero() {
             </li>
             <li className="flex items-start gap-2">
               <span className="text-primary mt-1">▸</span>
-              <span>Cybersecurity fundamentals</span>
+              <span>Cybersecurity: SIEM tools, threat hunting, incident response</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-primary mt-1">▸</span>
+              <span>Penetration testing & vulnerability assessment</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-primary mt-1">▸</span>
