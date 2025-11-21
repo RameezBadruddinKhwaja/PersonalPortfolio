@@ -37,6 +37,14 @@ export function ThemeProvider({
   const [theme, setTheme] = useState<Theme>(defaultTheme)
   const [mounted, setMounted] = useState(false)
 
+  useEffect(() => {
+    // Load theme from localStorage on mount (client-side only)
+    const storedTheme = localStorage.getItem(storageKey) as Theme
+    if (storedTheme) {
+      setTheme(storedTheme)
+    }
+  }, [storageKey])
+
   // Load theme from localStorage on mount (client-side only)
   useEffect(() => {
     const stored = localStorage.getItem(storageKey) as Theme
@@ -63,6 +71,7 @@ export function ThemeProvider({
       }, 0)
     }
   }, [theme, mounted, disableTransitionOnChange])
+  }, [theme, disableTransitionOnChange])
 
   const value = {
     theme,

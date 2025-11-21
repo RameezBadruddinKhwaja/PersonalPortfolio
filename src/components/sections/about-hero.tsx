@@ -2,6 +2,7 @@
 
 import { useRef } from "react"
 import { motion, useInView } from "framer-motion"
+import { motion } from "framer-motion"
 
 export function AboutHero() {
   const ref = useRef(null)
