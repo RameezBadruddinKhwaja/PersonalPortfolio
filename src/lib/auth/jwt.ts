@@ -62,9 +62,11 @@ export async function clearAuthCookie() {
 
 export function hashPassword(password: string): string {
   // For demo purposes - in production, use bcryptjs
-  return Buffer.from(password).toString("base64")
+  const bcrypt = require("bcryptjs")
+  return bcrypt.hashSync(password, 10)
 }
 
 export function comparePassword(password: string, hash: string): boolean {
-  return hashPassword(password) === hash
+  const bcrypt = require("bcryptjs")
+  return bcrypt.compareSync(password, hash)
 }
