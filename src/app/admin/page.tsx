@@ -80,18 +80,7 @@ export default function AdminDashboard() {
             </div>
           </CardContent>
         </Card>
-          ) : (
-            <div className='space-y-4'>
-              {feedbacks.map((fb) => (
-                <div key={fb.id} className='rounded-lg border bg-card p-6 hover:shadow-md transition-shadow'>
-                  <div className='flex flex-col md:flex-row md:justify-between gap-4'>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <p className='font-semibold text-lg'>{fb.name}</p>
-                        {fb.country && (
-                          <Badge>{fb.country}</Badge>
-                        )}
-                      </div>
+
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">

@@ -52,8 +52,6 @@ export function ProjectCard({ project }: { project: Project }) {
         <div className="flex flex-wrap gap-2">
           {project.tech.slice(0, 5).map((t: string) => (
             <Badge key={t} variant="secondary" className="text-xs">
-          {project.tech.map((t: string) => (
-            <Badge key={t}>
               {t}
             </Badge>
           ))}

@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     }
 
     // Generate JWT token
-    const token = signToken({
+    const token = await signToken({
       userId: "admin-1",
       email: email,
       role: "admin",

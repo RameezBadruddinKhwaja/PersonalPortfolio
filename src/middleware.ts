@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { verifyToken } from "@/lib/auth/jwt"
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   // Protect admin routes
   if (request.nextUrl.pathname.startsWith("/admin")) {
     // Allow access to login page
@@ -18,7 +18,7 @@ export function middleware(request: NextRequest) {
     }
 
     // Verify token
-    const payload = verifyToken(token.value)
+    const payload = await verifyToken(token.value)
 
     if (!payload || payload.role !== "admin") {
       return NextResponse.redirect(new URL("/admin/login", request.url))

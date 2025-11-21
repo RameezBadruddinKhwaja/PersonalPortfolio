@@ -2,7 +2,6 @@
 
 import { useState, useRef } from "react"
 import { motion, AnimatePresence, useInView } from "framer-motion"
-import { motion } from "framer-motion"
 import { ProjectCard } from "@/components/ui/project-card"
 import { projects, categories, ProjectCategory } from "@/lib/data/projects"
 import { Button } from "@/components/ui/button"

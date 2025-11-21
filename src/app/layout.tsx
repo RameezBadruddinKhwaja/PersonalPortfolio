@@ -5,7 +5,7 @@ import { LayoutWrapper } from "@/components/layout/layout-wrapper";
 import { AuthProvider } from "@/contexts/auth-context";
 import { MainNav } from "@/components/nav/main-nav";
 import { Footer } from "@/components/footer/footer";
-import { ChatButton } from "@/components/chat/chat-button";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: {
@@ -89,7 +89,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="min-h-screen bg-background font-sans antialiased">
+
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased"

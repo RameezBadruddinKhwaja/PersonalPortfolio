@@ -71,7 +71,7 @@ export function ThemeProvider({
       }, 0)
     }
   }, [theme, mounted, disableTransitionOnChange])
-  }, [theme, disableTransitionOnChange])
+
 
   const value = {
     theme,
