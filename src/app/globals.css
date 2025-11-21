@@ -120,4 +120,50 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: oklch(0.6 0.15 158 / 40%);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.6 0.15 158 / 60%);
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: oklch(0.75 0.18 158 / 30%);
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.75 0.18 158 / 50%);
+  }
+
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: oklch(0.6 0.15 158 / 40%) transparent;
+  }
+
+  .dark * {
+    scrollbar-color: oklch(0.75 0.18 158 / 30%) transparent;
+  }
+
+  /* Hide scrollbar for clean look (optional - shows on hover) */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
