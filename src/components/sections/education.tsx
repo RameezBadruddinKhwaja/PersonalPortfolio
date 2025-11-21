@@ -1,5 +1,7 @@
 "use client"
 
+import { useRef } from "react"
+import { motion, useInView } from "framer-motion"
 import { motion } from "framer-motion"
 
 const education = [
@@ -17,11 +19,14 @@ const education = [
 ]
 
 export function Education() {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: "-100px" })
+
   return (
-    <section className="mt-16 md:mt-24">
+    <section className="mt-16 md:mt-24" ref={ref}>
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 0.5 }}
         className="text-2xl font-bold tracking-tight sm:text-3xl mb-10"
       >
@@ -32,8 +37,8 @@ export function Education() {
         {education.map((item, index) => (
           <motion.div
             key={item.title}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -30 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
             transition={{ duration: 0.5, delay: index * 0.2 }}
             className="relative pl-8 border-l-2 border-primary pb-2 hover:border-primary/80 transition-colors"
           >

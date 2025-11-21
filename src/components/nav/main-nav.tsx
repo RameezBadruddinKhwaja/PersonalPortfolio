@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react"
 import { ThemeToggle } from "@/components/theme/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { motion, AnimatePresence } from "framer-motion"
+import { UserMenu } from "@/components/auth/user-menu"
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -64,6 +65,9 @@ export function MainNav() {
 
         {/* Right side actions */}
         <div className="flex items-center space-x-4">
+          <div className="hidden md:block">
+            <UserMenu />
+          </div>
           <ThemeToggle />
 
           {/* Mobile Menu Button */}
@@ -104,6 +108,9 @@ export function MainNav() {
                   {item.name}
                 </Link>
               ))}
+              <div className="pt-2 px-4 border-t">
+                <UserMenu />
+              </div>
             </nav>
           </motion.div>
         )}

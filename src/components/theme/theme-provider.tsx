@@ -35,6 +35,7 @@ export function ThemeProvider({
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(defaultTheme)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     // Load theme from localStorage on mount (client-side only)
@@ -44,7 +45,18 @@ export function ThemeProvider({
     }
   }, [storageKey])
 
+  // Load theme from localStorage on mount (client-side only)
   useEffect(() => {
+    const stored = localStorage.getItem(storageKey) as Theme
+    if (stored) {
+      setTheme(stored)
+    }
+    setMounted(true)
+  }, [storageKey])
+
+  useEffect(() => {
+    if (!mounted) return
+
     const root = window.document.documentElement
     const isDark = theme === "dark" ||
       (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
@@ -58,6 +70,7 @@ export function ThemeProvider({
         root.style.removeProperty("transition")
       }, 0)
     }
+  }, [theme, mounted, disableTransitionOnChange])
   }, [theme, disableTransitionOnChange])
 
   const value = {

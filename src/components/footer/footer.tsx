@@ -80,7 +80,7 @@ export function Footer() {
 
               <div className="flex gap-4 mt-4">
                 <a
-                  href="https://github.com/RameezBader"
+                  href="https://github.com/RameezBadruddinKhwaja"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors"

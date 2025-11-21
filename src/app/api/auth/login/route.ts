@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server"
-import { signToken, setAuthCookie, comparePassword, hashPassword } from "@/lib/auth/jwt"
+import { signToken, setAuthCookie } from "@/lib/auth/jwt"
 import { z } from "zod"
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  password: z.string().min(1, "Password is required"),
 })
 
-// Demo admin credentials - In production, store in database with hashed passwords
+// Admin credentials from environment or defaults
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@rameez.dev"
-const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || hashPassword("admin123")
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123"
 
 export async function POST(request: Request) {
   try {
@@ -19,15 +19,15 @@ export async function POST(request: Request) {
     const parsed = loginSchema.safeParse(body)
     if (!parsed.success) {
       return NextResponse.json(
-        { error: parsed.error.errors[0].message },
+        { error: parsed.error.issues[0].message },
         { status: 400 }
       )
     }
 
     const { email, password } = parsed.data
 
-    // Check credentials
-    if (email !== ADMIN_EMAIL || !comparePassword(password, ADMIN_PASSWORD_HASH)) {
+    // Check credentials (simple comparison for admin)
+    if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
       return NextResponse.json(
         { error: "Invalid email or password" },
         { status: 401 }
