@@ -1,161 +1,178 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase/client'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { LogOut } from 'lucide-react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { MessageSquare, Users, Globe, TrendingUp } from 'lucide-react'
+import Link from 'next/link'
 
-interface Feedback {
-  id: string
-  name: string
-  email: string
-  profession?: string
-  country?: string
-  linkedin?: string
-  message: string
-  created_at: string
+interface Stats {
+  totalFeedback: number
+  weeklyFeedback: number
+  uniqueCountries: number
+  recentFeedback: { name: string; country?: string; created_at: string }[]
 }
 
-export default function AdminPage() {
-  const [feedbacks, setFeedbacks] = useState<Feedback[]>([])
+export default function AdminDashboard() {
+  const [stats, setStats] = useState<Stats>({
+    totalFeedback: 0,
+    weeklyFeedback: 0,
+    uniqueCountries: 0,
+    recentFeedback: []
+  })
   const [loading, setLoading] = useState(true)
-  const router = useRouter()
 
   useEffect(() => {
-    async function load() {
-      const { data, error } = await supabase.from('feedbacks').select('*').order('created_at', { ascending: false }).limit(50)
-      if (error) {
-        console.error(error)
-      } else {
-        setFeedbacks(data || [])
+    async function loadStats() {
+      const { data, error } = await supabase
+        .from('feedbacks')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(100)
+
+      if (!error && data) {
+        const weekAgo = new Date()
+        weekAgo.setDate(weekAgo.getDate() - 7)
+
+        setStats({
+          totalFeedback: data.length,
+          weeklyFeedback: data.filter(fb => new Date(fb.created_at) > weekAgo).length,
+          uniqueCountries: new Set(data.map(fb => fb.country).filter(Boolean)).size,
+          recentFeedback: data.slice(0, 5)
+        })
       }
       setLoading(false)
     }
-    load()
+    loadStats()
   }, [])
 
-  const handleLogout = async () => {
-    try {
-      await fetch('/api/auth/logout', { method: 'POST' })
-      router.push('/admin/login')
-      router.refresh()
-    } catch (error) {
-      console.error('Logout failed:', error)
-    }
-  }
-
   return (
-    <div className="container px-4 md:px-6 py-8 md:py-12">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
-            <p className="text-muted-foreground">
-              Manage feedback submissions and view analytics
-            </p>
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleLogout}
-            className="flex items-center gap-2"
-          >
-            <LogOut className="h-4 w-4" />
-            Logout
-          </Button>
-        </div>
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <p className="text-muted-foreground mt-1">
+          Welcome to your admin dashboard
+        </p>
+      </div>
 
-        {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <div className="rounded-lg border bg-card p-6">
-            <h3 className="text-sm font-medium text-muted-foreground">Total Feedback</h3>
-            <p className="text-3xl font-bold mt-2">{feedbacks.length}</p>
-          </div>
-          <div className="rounded-lg border bg-card p-6">
-            <h3 className="text-sm font-medium text-muted-foreground">This Week</h3>
-            <p className="text-3xl font-bold mt-2">
-              {feedbacks.filter(fb => {
-                const date = new Date(fb.created_at)
-                const weekAgo = new Date()
-                weekAgo.setDate(weekAgo.getDate() - 7)
-                return date > weekAgo
-              }).length}
-            </p>
-          </div>
-          <div className="rounded-lg border bg-card p-6">
-            <h3 className="text-sm font-medium text-muted-foreground">Countries</h3>
-            <p className="text-3xl font-bold mt-2">
-              {new Set(feedbacks.map(fb => fb.country).filter(Boolean)).size}
-            </p>
-          </div>
-        </div>
-
-        <section className='mb-8'>
-          <h2 className='text-xl font-semibold mb-4'>Recent Feedback</h2>
-          {loading ? (
-            <div className="space-y-4">
-              {[1, 2, 3].map(i => (
-                <div key={i} className="rounded-lg border p-6 animate-pulse">
-                  <div className="h-4 bg-muted rounded w-1/4 mb-2"></div>
-                  <div className="h-3 bg-muted rounded w-1/3 mb-4"></div>
-                  <div className="h-3 bg-muted rounded w-full"></div>
-                </div>
-              ))}
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Total Feedback</CardTitle>
+            <MessageSquare className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {loading ? '...' : stats.totalFeedback}
             </div>
-          ) : feedbacks.length === 0 ? (
-            <div className="text-center py-12 border rounded-lg">
-              <p className="text-muted-foreground">No feedback submissions yet.</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">This Week</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {loading ? '...' : stats.weeklyFeedback}
             </div>
-          ) : (
-            <div className='space-y-4'>
-              {feedbacks.map((fb) => (
-                <div key={fb.id} className='rounded-lg border bg-card p-6 hover:shadow-md transition-shadow'>
-                  <div className='flex flex-col md:flex-row md:justify-between gap-4'>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <p className='font-semibold text-lg'>{fb.name}</p>
-                        {fb.country && (
-                          <Badge variant="secondary">{fb.country}</Badge>
-                        )}
-                      </div>
+          </CardContent>
+        </Card>
 
-                      <div className="space-y-1 text-sm text-muted-foreground mb-3">
-                        <p>📧 {fb.email}</p>
-                        {fb.profession && <p>💼 {fb.profession}</p>}
-                        {fb.linkedin && (
-                          <p>
-                            🔗 <a
-                              href={fb.linkedin}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-primary hover:underline"
-                            >
-                              LinkedIn Profile
-                            </a>
-                          </p>
-                        )}
-                      </div>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Countries</CardTitle>
+            <Globe className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {loading ? '...' : stats.uniqueCountries}
+            </div>
+          </CardContent>
+        </Card>
 
-                      <p className='mt-3 text-foreground leading-relaxed'>{fb.message}</p>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Projects</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">7</div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Feedback</CardTitle>
+            <CardDescription>Latest submissions from visitors</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {loading ? (
+              <div className="space-y-2">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="h-10 bg-muted rounded animate-pulse" />
+                ))}
+              </div>
+            ) : stats.recentFeedback.length === 0 ? (
+              <p className="text-muted-foreground text-sm">No feedback yet</p>
+            ) : (
+              <div className="space-y-2">
+                {stats.recentFeedback.map((fb, i) => (
+                  <div key={i} className="flex justify-between items-center py-2 border-b last:border-0">
+                    <div>
+                      <p className="font-medium text-sm">{fb.name}</p>
+                      <p className="text-xs text-muted-foreground">{fb.country || 'Unknown'}</p>
                     </div>
-
-                    <div className='text-sm text-muted-foreground whitespace-nowrap'>
-                      {new Date(fb.created_at).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}
-                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      {new Date(fb.created_at).toLocaleDateString()}
+                    </p>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
+                ))}
+              </div>
+            )}
+            <Link
+              href="/admin/feedback"
+              className="text-sm text-primary hover:underline mt-4 inline-block"
+            >
+              View all feedback →
+            </Link>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Quick Actions</CardTitle>
+            <CardDescription>Manage your portfolio content</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <Link
+              href="/admin/projects"
+              className="block p-3 rounded-lg bg-muted hover:bg-muted/80 transition-colors"
+            >
+              <p className="font-medium text-sm">Manage Projects</p>
+              <p className="text-xs text-muted-foreground">Add, edit, or remove projects</p>
+            </Link>
+            <Link
+              href="/admin/about"
+              className="block p-3 rounded-lg bg-muted hover:bg-muted/80 transition-colors"
+            >
+              <p className="font-medium text-sm">Edit About Section</p>
+              <p className="text-xs text-muted-foreground">Update your bio and skills</p>
+            </Link>
+            <Link
+              href="/admin/home"
+              className="block p-3 rounded-lg bg-muted hover:bg-muted/80 transition-colors"
+            >
+              <p className="font-medium text-sm">Edit Home Page</p>
+              <p className="text-xs text-muted-foreground">Update hero section and tagline</p>
+            </Link>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )
