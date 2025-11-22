@@ -121,12 +121,6 @@ export default function AdminLogin() {
             </Button>
           </form>
 
-          {/* Demo Credentials */}
-          <div className="mt-6 p-4 rounded-lg bg-muted/50 text-sm">
-            <p className="font-medium mb-2">Demo Credentials:</p>
-            <p className="text-muted-foreground">Email: admin@rameez.dev</p>
-            <p className="text-muted-foreground">Password: admin123</p>
-          </div>
         </div>
       </motion.div>
     </div>

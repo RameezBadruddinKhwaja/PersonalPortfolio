@@ -50,54 +50,23 @@ export async function POST(req: NextRequest) {
           }
         )
       } catch (ragError) {
-        console.error("RAG error, falling back to Python bot:", ragError)
-        // Fall through to Python bot fallback
-      }
-    }
-
-    // Fallback to Python FastAPI backend
-    const botUrl = process.env.NEXT_PUBLIC_AI_BOT_URL || "http://localhost:8000"
-
-    try {
-      const response = await fetch(`${botUrl}/chat`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ message: parsed.message }),
-        signal: AbortSignal.timeout(10000), // 10 second timeout
-      })
-
-      if (!response.ok) {
-        throw new Error("Python bot request failed")
-      }
-
-      const botData = await response.json()
-
-      return NextResponse.json(
-        {
-          reply: botData.reply,
-          method: "python-bot",
-        },
-        {
-          status: 200,
-          headers: {
-            "X-RateLimit-Limit": String(rateLimit.limit),
-            "X-RateLimit-Remaining": String(rateLimit.remaining),
-            "X-RateLimit-Reset": new Date(rateLimit.reset).toISOString(),
+        console.error("RAG chatbot error:", ragError)
+        // Return friendly fallback message
+        return NextResponse.json(
+          {
+            reply: "Hello! I'm RameezBot. I'm currently experiencing technical difficulties, but I'm here to help! You can reach Rameez directly at rameezbader@gmail.com or connect on LinkedIn.",
+            method: "fallback",
           },
-        }
-      )
-    } catch (pythonError) {
-      console.error("Python bot also failed:", pythonError)
-      // Return generic fallback
-      return NextResponse.json(
-        {
-          reply: "Hello! I'm RameezBot. I'm currently experiencing technical difficulties, but I'm here to help! You can reach Rameez directly at rameezbaderkhwaja@gmail.com or connect on LinkedIn.",
-          method: "fallback",
-        },
-        { status: 200 }
-      )
+          {
+            status: 200,
+            headers: {
+              "X-RateLimit-Limit": String(rateLimit.limit),
+              "X-RateLimit-Remaining": String(rateLimit.remaining),
+              "X-RateLimit-Reset": new Date(rateLimit.reset).toISOString(),
+            },
+          }
+        )
+      }
     }
   } catch (err) {
     console.error("Chat API error:", err)

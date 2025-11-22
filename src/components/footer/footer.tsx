@@ -117,7 +117,7 @@ export function Footer() {
               © {currentYear} Rameez Bader Khwaja. All rights reserved.
             </p>
             <p className="text-xs">
-              Built with Next.js, TypeScript, Tailwind CSS & ❤️
+              Built with Next.js, TypeScript, Tailwind CSS
             </p>
           </div>
         </div>

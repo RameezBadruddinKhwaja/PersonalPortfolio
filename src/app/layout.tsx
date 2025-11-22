@@ -6,6 +6,7 @@ import { AuthProvider } from "@/contexts/auth-context";
 import { MainNav } from "@/components/nav/main-nav";
 import { Footer } from "@/components/footer/footer";
 import { cn } from "@/lib/utils";
+import { Analytics } from "@vercel/analytics/react";
 
 export const metadata: Metadata = {
   title: {
@@ -126,6 +127,7 @@ export default function RootLayout({
             </LayoutWrapper>
           </AuthProvider>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );

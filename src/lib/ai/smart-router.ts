@@ -192,7 +192,7 @@ export function searchWebsiteData(query: string): string | null {
   // Projects query
   if (lowerQuery.includes("project") || lowerQuery.includes("built") || lowerQuery.includes("work")) {
     return `Rameez's notable projects:\n\n` +
-      data.projects.map((p, i) =>
+      data.projects.map((p: any, i: number) =>
         `${i + 1}. **${p.name}**: ${p.description}\n   Tech: ${p.tech.join(", ")}`
       ).join("\n\n")
   }
