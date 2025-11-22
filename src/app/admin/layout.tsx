@@ -12,7 +12,8 @@ import {
   Home,
   LogOut,
   Settings,
-  BarChart3
+  BarChart3,
+  Award
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -21,6 +22,7 @@ const adminNavItems = [
   { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
   { name: 'Feedback', href: '/admin/feedback', icon: MessageSquare },
   { name: 'Projects', href: '/admin/projects', icon: FolderKanban },
+  { name: 'Accomplishments', href: '/admin/accomplishments', icon: Award },
   { name: 'About', href: '/admin/about', icon: User },
   { name: 'Home', href: '/admin/home', icon: Home },
 ]
