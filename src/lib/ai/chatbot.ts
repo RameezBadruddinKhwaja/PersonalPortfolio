@@ -3,6 +3,12 @@ import { GoogleGenerativeAI } from "@google/generative-ai"
 import { retrieveContext, searchChatHistory } from "@/lib/rag/knowledge-base"
 import { generateEmbedding, stringifyEmbedding } from "@/lib/ai/embeddings"
 import { supabase } from "@/lib/supabase/client"
+import {
+  isGreetingOrSmallTalk,
+  handleGreeting,
+  searchWebsiteData,
+  generateWebsiteDataResponse
+} from "@/lib/ai/smart-router"
 
 // OpenAI SDK client (can be configured for different providers)
 const openai = new OpenAI({
@@ -31,6 +37,40 @@ export async function generateRAGResponse(
   sessionId?: string
 ): Promise<ChatResponse> {
   try {
+    // LAYER 1: Handle greetings and small talk (no RAG needed)
+    if (isGreetingOrSmallTalk(userMessage)) {
+      const reply = await handleGreeting(userMessage)
+      return {
+        reply,
+        context: ["greeting"],
+        sessionId,
+      }
+    }
+
+    // LAYER 2: Search website data first (fast, no embeddings needed)
+    const websiteData = searchWebsiteData(userMessage)
+    if (websiteData) {
+      const reply = await generateWebsiteDataResponse(userMessage, websiteData)
+
+      // Store in database
+      if (sessionId) {
+        await supabase.from("chat_messages").insert({
+          session_id: sessionId,
+          user_message: userMessage,
+          bot_reply: reply,
+          embedding: null,
+          context_used: "website_data",
+        })
+      }
+
+      return {
+        reply,
+        context: ["website_data"],
+        sessionId,
+      }
+    }
+
+    // LAYER 3: Use full RAG for complex questions
     // Step 1: Retrieve relevant context from knowledge base
     const contexts = await retrieveContext(userMessage, 3, 0.7)
 

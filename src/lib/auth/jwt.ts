@@ -1,4 +1,4 @@
-import { SignJWT, jwtVerify } from "jose"
+import { SignJWT, jwtVerify, type JWTPayload as JoseJWTPayload } from "jose"
 import { cookies } from "next/headers"
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-in-production"
@@ -7,12 +7,10 @@ const JWT_EXPIRES_IN = "7d" // 7 days
 // Convert secret to Uint8Array for jose
 const getSecretKey = () => new TextEncoder().encode(JWT_SECRET)
 
-export interface JWTPayload {
+export interface JWTPayload extends JoseJWTPayload {
   userId: string
   email: string
   role: "admin" | "user"
-  iat?: number
-  exp?: number
 }
 
 export async function signToken(payload: Omit<JWTPayload, "iat" | "exp">): Promise<string> {
