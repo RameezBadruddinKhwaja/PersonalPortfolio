@@ -84,61 +84,85 @@ export function extractWebsiteData(): Record<string, any> {
   return {
     about: {
       name: "Rameez Bader Khwaja",
-      title: "Full-Stack Developer & AI Enthusiast",
+      title: "Spec Driven Developer & AI Enthusiast",
+      specialization: "CyberSecurity",
       location: "Karachi, Pakistan",
-      bio: "Passionate about building modern web applications with Next.js, TypeScript, and AI integration. Currently part of Governor Sindh IT Initiative (Panaverse Program).",
+      bio: "Passionate Spec Driven Developer and AI enthusiast with specialization in CyberSecurity. Focuses on building scalable, intelligent, and visually interactive web applications combining modern frameworks with artificial intelligence.",
     },
 
     education: [
       {
-        degree: "ADP in Computer Information Systems",
+        degree: "Associate Degree in Computer Information Systems (ADP-CIS)",
         institution: "Hamdard University",
-        focus: ["Programming", "Software Development", "Data Management", "Computer Systems Architecture"],
+        focus: ["Programming and Software Development", "Data Management and Communication", "Computer Systems Architecture"],
       },
       {
-        program: "Governor Sindh IT Initiative (Panaverse Program)",
-        learning: ["TypeScript", "Next.js", "Python", "Node.js", "Agentic AI"],
+        degree: "BS Lateral in Computer Science",
+        institution: "Virtual University",
+        status: "Currently Enrolled",
+      },
+      {
+        program: "Governor Sindh IT Initiative",
+        learning: ["TypeScript", "Next.js", "Node.js", "Python", "Agentic AI", "Spec driven Development", "Prompt Engineering"],
       },
     ],
 
     skills: {
-      frontend: ["Next.js", "TypeScript", "React", "Tailwind CSS", "Framer Motion"],
+      frontend: ["Next.js", "React", "TypeScript", "Tailwind CSS", "ShadCN UI", "Framer Motion", "Three.js"],
       backend: ["Node.js", "Express.js", "Prisma", "PostgreSQL", "REST APIs"],
-      aiDevOps: ["Python", "OpenAI SDK", "Gemini API", "FastAPI", "Agentic AI"],
-      tools: ["Git", "GitHub", "Vercel", "Supabase", "Passport.js", "ShadCN UI"],
+      aiAutomation: ["Python", "OpenAI SDK", "Gemini API", "Agentic AI"],
+      tools: ["Git", "GitHub", "Vercel", "Supabase", "Passport.js", "Cloudinary", "Docker", "CI/CD"],
     },
 
     projects: [
       {
         name: "AuthApp Sage",
-        description: "Modern authentication system with OAuth integration",
-        tech: ["Next.js", "TypeScript", "Supabase", "OAuth"],
+        description: "Secure authentication system with Google/GitHub OAuth, Cloudinary uploads, Prisma ORM, and CSRF protection",
+        tech: ["Next.js", "TypeScript", "Supabase", "OAuth", "Cloudinary"],
+        deployed: "Vercel",
       },
       {
         name: "RameezBot",
-        description: "AI-powered chatbot with RAG (Retrieval Augmented Generation)",
-        tech: ["Gemini API", "Vector Embeddings", "Next.js"],
+        description: "Intelligent portfolio chatbot powered by Gemini API, capable of contextual replies and learning from feedback",
+        tech: ["Gemini API", "RAG", "Vector Embeddings", "Next.js"],
       },
       {
-        name: "Full-Stack Applications",
-        description: "Enterprise-level apps with complete CRUD operations",
-        tech: ["Next.js", "Express", "Prisma", "PostgreSQL"],
+        name: "Interactive Portfolio",
+        description: "Modern developer portfolio using Next.js, TypeScript, ShadCN, and Three.js with admin-controlled CMS and dynamic content",
+        tech: ["Next.js", "TypeScript", "ShadCN", "Three.js", "CMS"],
+      },
+      {
+        name: "Color Guessing Game",
+        description: "JavaScript-based color challenge game built with Tailwind CSS and RGB logic",
+        tech: ["JavaScript", "Tailwind CSS"],
+      },
+      {
+        name: "Agentic AI Prototypes",
+        description: "Experiments with AI agents, RAG, and multi-model reasoning built during Panaverse training",
+        tech: ["AI Agents", "RAG", "Multi-model"],
       },
     ],
 
     interests: [
-      "Building interactive UIs",
-      "Exploring Agentic AI with OpenAI and Gemini APIs",
-      "Working with Express.js and databases",
-      "Cloud deployments",
+      "Developing interactive UIs",
+      "Working on AI automation",
+      "Experimenting with intelligent systems that learn from user feedback",
       "Cybersecurity",
-      "Learning new frameworks",
+      "Cloud platforms",
+      "Scalable backend systems",
     ],
 
+    goals: "AI-first Full Stack Engineer, combining strong backend logic with intelligent automation, data-driven design, and secure scalable infrastructure. Build solutions that benefit people, align with ethical AI principles, and reflect excellence in both design and performance.",
+
+    values: "Discipline, faith, and purpose-driven development. Contributing positively to society, creating technology that serves people, and using skills in a way that aligns with faith and values.",
+
+    personality: "Calm, analytical, and mission-focused. Prefers simplicity in design, clarity in logic, and meaningful collaboration. Constantly learns, plans deeply before coding, and loves building systems that feel alive.",
+
     contact: {
-      email: "rameezbaderkhwaja@gmail.com",
+      email: "rameezbader@gmail.com",
       github: "github.com/RameezBadruddinKhwaja",
       linkedin: "linkedin.com/in/rameezbaderkhwaja",
+      linkedinFull: "https://www.linkedin.com/in/rameez-badruddin-khwaja-7b2277256/",
     },
   }
 }

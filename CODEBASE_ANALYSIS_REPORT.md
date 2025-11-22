@@ -382,3 +382,76 @@ What makes this portfolio unique:
 **Built with ❤️ | Powered by Next.js 16, React 19, Gemini AI**
 
 *Report generated: November 22, 2025 | Analyzed: 71 TypeScript/TSX files*
+
+category: about
+
+Rameez Bader Khwaja is a passionate Spec Driven Developer and AI enthusiast with specialization in CyberSecurit also from Karachi, Pakistan. He focuses on building scalable, intelligent, and visually interactive web applications combining modern frameworks with artificial intelligence.
+
+category: education
+
+Rameez has completed an Associate Degree in Computer Information Systems (ADP-CIS) from Hamdard University, majoring in Programming and Software Development, Data Management and Communication, and Computer Systems Architecture. And is currently enrolled in BS Lateral in Computer Science pursuing this degree from virtual university.
+
+category: programs
+
+He is currently enrolled in the Governor Sindh IT Initiative, where he is studying TypeScript, Next.js, Node.js, Python, Agentic AI, Spec driven, Development prompt engineering and advanced full-stack concepts with real-world projects.
+
+category: skills
+
+His technical expertise includes:
+
+Frontend: Next.js, React, TypeScript, Tailwind CSS, ShadCN UI, Framer Motion, Three.js
+
+Backend: Node.js, Express.js, Prisma, PostgreSQL, REST APIs
+
+AI & Automation: Python, OpenAI SDK, Gemini API, Agentic AI
+
+Tools & Deployment: Git, GitHub, Vercel, Supabase, Passport.js, Cloudinary, Docker, CI/CD
+
+category: projects
+
+Rameez has built multiple projects showcasing full-stack and AI integration:
+
+AuthApp Sage: A secure authentication system with Google/GitHub OAuth, Cloudinary uploads, Prisma ORM, and CSRF protection — deployed on Vercel.
+
+RameezBot: An intelligent portfolio chatbot powered by Gemini API, capable of contextual replies and learning from feedback.
+
+Interactive Portfolio: A modern developer portfolio using Next.js, TypeScript, ShadCN, and Three.js with admin-controlled CMS and dynamic content.
+
+Color Guessing Game: A JavaScript-based color challenge game built with Tailwind CSS and RGB logic.
+
+Agentic AI Prototypes: Experiments with AI agents, RAG, and multi-model reasoning built during Panaverse training.
+
+category: interests
+
+Rameez enjoys developing interactive UIs, working on AI automation, and experimenting with intelligent systems that learn from user feedback. He is also interested in cybersecurity, cloud platforms, and scalable backend systems.
+
+category: goals
+
+His long-term goal is to become an AI-first Full Stack Engineer, combining strong backend logic with intelligent automation, data-driven design, and secure scalable infrastructure.
+He aims to build solutions that benefit people, align with ethical AI principles, and reflect excellence in both design and performance.
+
+category: values
+
+Rameez believes in discipline, faith, and purpose-driven development. His motivation comes from contributing positively to society, creating technology that serves people, and using his skills in a way that aligns with his faith and values.
+
+category: personality
+
+Rameez is calm, analytical, and mission-focused. He prefers simplicity in design, clarity in logic, and meaningful collaboration. He constantly learns, plans deeply before coding, and loves building systems that “feel alive.”
+
+category: contact
+
+Email: rameezbader@gmail.com
+
+GitHub: [github.com/RameezBader](https://github.com/RameezBadruddinKhwaja)
+
+LinkedIn: [linkedin.com/in/rameezbaderkhwaja](https://www.linkedin.com/in/rameez-badruddin-khwaja-7b2277256/)
+
+Location: Karachi, Pakistan
+
+category: achievements
+
+Rameez has successfully built and deployed a full-stack authentication system with real-time dashboard analytics, developed intelligent agents using the Gemini API, and mastered modern web frameworks including Next.js and TypeScript. His portfolio projects demonstrate not only coding skill but also strong system design, security awareness, and modern UI/UX integration.
+
+category: portfolio_summary
+
+Rameez’s portfolio website serves as a fusion of AI and modern full-stack engineering. It demonstrates his ability to design, architect, and deploy scalable systems with smooth UI/UX, secure backend logic, and adaptive AI capabilities — reflecting real professional-grade work rather than simple showcase sites.
