@@ -6,8 +6,8 @@ export function Footer() {
 
   return (
     <footer className="w-full border-t bg-muted/30">
-      <div className="container py-8 md:py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="container py-8 md:py-12 px-4 md:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           {/* Brand & Tagline */}
           <div className="space-y-3">
             <Link href="/" className="font-bold text-xl inline-block">

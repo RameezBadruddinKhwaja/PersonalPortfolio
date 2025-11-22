@@ -29,9 +29,9 @@ export function MainNav() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
+      <div className="container flex h-16 items-center justify-between px-4 md:px-6 lg:px-8">
         {/* Logo */}
-        <div className="flex items-center">
+        <div className="flex items-center flex-shrink-0">
           <Link href="/" className="font-bold text-xl group">
             <span className="text-foreground">Rameez</span>
             <span className="text-primary group-hover:opacity-80 transition-opacity">.dev</span>
@@ -64,7 +64,7 @@ export function MainNav() {
         </nav>
 
         {/* Right side actions */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center gap-3 md:gap-4 flex-shrink-0">
           <div className="hidden md:block">
             <UserMenu />
           </div>
@@ -93,7 +93,7 @@ export function MainNav() {
             transition={{ duration: 0.2 }}
             className="md:hidden border-t bg-background"
           >
-            <nav className="container py-4 flex flex-col space-y-3">
+            <nav className="container py-4 px-4 md:px-6 flex flex-col space-y-3">
               {navItems.map((item) => (
                 <Link
                   key={item.href}
