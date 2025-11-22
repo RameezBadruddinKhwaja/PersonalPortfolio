@@ -1,160 +1,188 @@
-# Supabase Setup Guide
+# Supabase OAuth Setup Guide
 
-This guide will help you set up Supabase for your portfolio website.
+## Step 1: Get Supabase Credentials
 
-## Prerequisites
+1. Go to your Supabase Dashboard: https://app.supabase.com
+2. Select your project: `yhihzipmecvtvoofhqxh`
+3. Go to **Settings** → **API**
+4. Copy the following:
+   - **Project URL**: `https://yhihzipmecvtvoofhqxh.supabase.co`
+   - **anon/public key**: (from API settings)
 
-1. Create a Supabase account at [supabase.com](https://supabase.com)
-2. Create a new project in Supabase
+## Step 2: Configure OAuth Providers in Supabase
 
-## Step 1: Get Your Credentials
+### GitHub OAuth
 
-After creating your project, get the following from **Project Settings → API**:
+1. In Supabase Dashboard → Authentication → Providers → GitHub
+2. Toggle **GitHub Enabled** ON
+3. Enter your GitHub OAuth credentials:
+   - **Client ID**: (from GitHub OAuth App)
+   - **Client Secret**: (from GitHub OAuth App)
+4. Click **Save**
 
-- `Project URL` (NEXT_PUBLIC_SUPABASE_URL)
-- `anon public` key (NEXT_PUBLIC_SUPABASE_ANON_KEY)
-- `Database URL` (for Prisma, from **Project Settings → Database**)
+The callback URL is already set: `https://yhihzipmecvtvoofhqxh.supabase.co/auth/v1/callback`
 
-Add these to your `.env.local` file.
+### Google OAuth
 
-## Step 2: Create Database Tables
+1. In Supabase Dashboard → Authentication → Providers → Google
+2. Toggle **Enable Sign in with Google** ON
+3. Enter your Google OAuth credentials:
+   - **Client IDs**: (comma-separated list from Google Cloud Console)
+   - **Client Secret**: (from Google Cloud Console)
+4. Enable **Skip nonce checks** if needed
+5. Enable **Allow users without an email** if needed
+6. Click **Save**
 
-Go to **SQL Editor** in your Supabase dashboard and run the following SQL:
+The callback URL is already set: `https://yhihzipmecvtvoofhqxh.supabase.co/auth/v1/callback`
+
+## Step 3: Create OAuth Apps (if not done)
+
+### For GitHub:
+
+1. Go to: https://github.com/settings/developers
+2. Click **New OAuth App**
+3. Fill in:
+   - **Application name**: Rameez Portfolio
+   - **Homepage URL**: `http://localhost:3000`
+   - **Authorization callback URL**: `https://yhihzipmecvtvoofhqxh.supabase.co/auth/v1/callback`
+4. Click **Register application**
+5. Copy **Client ID** and generate **Client Secret**
+6. Paste these in Supabase (Step 2)
+
+### For Google:
+
+1. Go to: https://console.cloud.google.com
+2. Create/Select project
+3. Go to **APIs & Services** → **Credentials**
+4. Click **Create Credentials** → **OAuth client ID**
+5. Choose **Web application**
+6. Add Authorized redirect URI: `https://yhihzipmecvtvoofhqxh.supabase.co/auth/v1/callback`
+7. Click **Create**
+8. Copy **Client ID** and **Client Secret**
+9. Paste these in Supabase (Step 2)
+
+## Step 4: Update .env.local
+
+Replace these values in your `.env.local` file:
+
+```env
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=https://yhihzipmecvtvoofhqxh.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.YOUR_ACTUAL_KEY_HERE
+```
+
+To get your anon key:
+1. Go to Supabase Dashboard
+2. Settings → API
+3. Copy the **anon/public** key
+
+## Step 5: Configure Redirect URLs in Supabase
+
+1. Go to Authentication → URL Configuration
+2. Add these to **Redirect URLs**:
+   - `http://localhost:3000/auth/callback`
+   - `http://localhost:3000` (for local dev)
+   - Your production URL when deploying
+
+## Step 6: Test OAuth
+
+1. Start dev server: `npm run dev`
+2. Go to `http://localhost:3000/login`
+3. Click **Continue with Google** or **Continue with GitHub**
+4. Authorize the app
+5. You should be redirected back and logged in
+6. Check navbar - you should see your profile avatar
+
+## Quick Commands
+
+```bash
+# Start dev server
+npm run dev
+
+# Build and check for errors
+npm run build
+
+# Check if OAuth is working
+# Visit: http://localhost:3000/login
+```
+
+## Database Tables Needed
+
+Run these SQL queries in Supabase SQL Editor if tables don't exist:
 
 ```sql
--- Create feedbacks table
+-- Feedbacks table
 CREATE TABLE IF NOT EXISTS feedbacks (
-  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL,
   email TEXT NOT NULL,
   profession TEXT,
   country TEXT,
   linkedin TEXT,
   message TEXT NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Create projects table
-CREATE TABLE IF NOT EXISTS projects (
-  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
-  title TEXT NOT NULL,
-  description TEXT NOT NULL,
-  tech TEXT[] NOT NULL,
-  live TEXT,
-  repo TEXT,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+-- Chat sessions table
+CREATE TABLE IF NOT EXISTS chat_sessions (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  session_id TEXT UNIQUE NOT NULL,
+  user_ip TEXT,
+  user_agent TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  ended_at TIMESTAMPTZ
 );
 
--- Create chat_messages table (optional, for analytics)
+-- Chat messages table
 CREATE TABLE IF NOT EXISTS chat_messages (
-  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  session_id TEXT REFERENCES chat_sessions(session_id),
   user_message TEXT NOT NULL,
   bot_reply TEXT NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  embedding TEXT,
+  context_used TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Add indexes for better query performance
-CREATE INDEX IF NOT EXISTS idx_feedbacks_created_at ON feedbacks(created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_projects_created_at ON projects(created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_chat_messages_created_at ON chat_messages(created_at DESC);
-
--- Enable Row Level Security (RLS)
-ALTER TABLE feedbacks ENABLE ROW LEVEL SECURITY;
-ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
-ALTER TABLE chat_messages ENABLE ROW LEVEL SECURITY;
-
--- Create policies for public read/insert access
-CREATE POLICY "Allow public read access to projects"
-  ON projects FOR SELECT
-  USING (true);
-
-CREATE POLICY "Allow public insert access to feedbacks"
-  ON feedbacks FOR INSERT
-  WITH CHECK (true);
-
-CREATE POLICY "Allow public read access to feedbacks (for admin)"
-  ON feedbacks FOR SELECT
-  USING (true);
-
-CREATE POLICY "Allow public insert access to chat_messages"
-  ON chat_messages FOR INSERT
-  WITH CHECK (true);
+-- Knowledge base table
+CREATE TABLE IF NOT EXISTS knowledge_base (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  content TEXT NOT NULL,
+  embedding TEXT NOT NULL,
+  metadata JSONB,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
 ```
-
-## Step 3: Verify Tables
-
-1. Go to **Table Editor** in Supabase
-2. You should see `feedbacks`, `projects`, and `chat_messages` tables
-3. Verify columns match the schema above
-
-## Step 4: (Optional) Seed Sample Data
-
-If you want to add sample projects to test:
-
-```sql
-INSERT INTO projects (title, description, tech, live, repo) VALUES
-  (
-    'AuthApp Sage',
-    'A full-stack authentication system built with Next.js, Express, Prisma, and PostgreSQL.',
-    ARRAY['Next.js', 'Express.js', 'Prisma', 'PostgreSQL', 'Passport.js'],
-    'https://your-deployment-url.vercel.app',
-    'https://github.com/RameezBader/authapp'
-  ),
-  (
-    'Color Guessing Game',
-    'An interactive RGB color matching game with multiple modes.',
-    ARRAY['JavaScript', 'Tailwind CSS', 'HTML5'],
-    'https://your-game-url.vercel.app',
-    'https://github.com/RameezBader/color-guessing-game'
-  ),
-  (
-    'Agentic AI Bot',
-    'An experimental AI agent using OpenAI SDK and Next.js.',
-    ARRAY['Python', 'Next.js', 'OpenAI SDK', 'FastAPI'],
-    'https://your-ai-bot-url.vercel.app',
-    'https://github.com/RameezBader/agentic-ai-bot'
-  );
-```
-
-## Step 5: Test Connection
-
-1. Start your Next.js dev server: `npm run dev`
-2. Try submitting the feedback form
-3. Check Supabase **Table Editor** to see if the data appears in the `feedbacks` table
 
 ## Troubleshooting
 
-### Connection Error
-- Verify your environment variables are correct
-- Make sure you're using `NEXT_PUBLIC_` prefix for client-side variables
-- Restart your dev server after changing `.env.local`
+**"Invalid Supabase credentials" error:**
+- Check that NEXT_PUBLIC_SUPABASE_URL matches your project URL
+- Verify NEXT_PUBLIC_SUPABASE_ANON_KEY is correct
+- Restart dev server after changing .env.local
 
-### Permission Denied
-- Check Row Level Security (RLS) policies
-- Make sure the policies allow the operations you're trying to perform
+**OAuth redirect not working:**
+- Verify callback URL matches exactly in GitHub/Google settings
+- Check Supabase Auth → URL Configuration has your URLs
+- Clear browser cookies and try again
 
-### Data Not Appearing
+**Users not appearing in Supabase:**
+- Check Supabase → Authentication → Users
+- Verify OAuth provider is enabled
 - Check browser console for errors
-- Verify API route is working: `http://localhost:3000/api/feedback`
-- Check Supabase logs in the dashboard
 
-## Admin Dashboard Access
+## Security Checklist
 
-To view feedback in your admin dashboard:
-
-1. Navigate to `/admin` in your app
-2. You should see all feedback submissions
-3. (Future enhancement: Add authentication to protect this route)
+- [ ] .env.local is in .gitignore
+- [ ] Strong admin password set
+- [ ] OAuth secrets are kept private
+- [ ] Production URLs updated in OAuth apps
+- [ ] RLS policies configured on tables (optional but recommended)
 
 ## Next Steps
 
-- Set up authentication for the admin dashboard
-- Enable email notifications when new feedback arrives
-- Add analytics tracking for chat messages
-- Consider adding backups for your database
-
-## Resources
-
-- [Supabase Documentation](https://supabase.com/docs)
-- [Supabase Row Level Security](https://supabase.com/docs/guides/auth/row-level-security)
-- [Next.js + Supabase Guide](https://supabase.com/docs/guides/getting-started/quickstarts/nextjs)
+After OAuth is working:
+1. Test login with both Google and GitHub
+2. Check that users appear in Supabase Auth → Users
+3. Deploy to production (Vercel/Netlify)
+4. Update OAuth callback URLs for production domain
