@@ -37,8 +37,8 @@ export async function POST(req: NextRequest) {
 
     // Send email via Resend
     const emailData = await resend.emails.send({
-      from: "Portfolio Contact <noreply@rameez.me>", // Will be updated after domain verification
-      to: process.env.ADMIN_EMAIL || "rameezbader@gmail.com",
+      from: "Portfolio Contact <noreply@rameezbadruddinkhwaja.me>",
+      to: process.env.ADMIN_EMAIL || "rameezbader.dev@gmail.com",
       replyTo: parsed.email,
       subject: parsed.subject || `New Contact from ${parsed.name}`,
       html: `
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
         <h3>Message:</h3>
         <p>${parsed.message.replace(/\n/g, "<br />")}</p>
         <hr />
-        <p><em>Sent from rameez.me portfolio website</em></p>
+        <p><em>Sent from rameezbadruddinkhwaja.me portfolio website</em></p>
       `,
     })
 

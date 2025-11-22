@@ -39,12 +39,12 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://rameez.dev"), // Replace with your actual domain
+  metadataBase: new URL("https://rameezbadruddinkhwaja.me"),
   openGraph: {
     title: "Rameez Bader Khwaja | Full Stack & AI Developer",
     description:
       "Full Stack Developer and AI enthusiast specializing in Next.js, TypeScript, and modern web technologies.",
-    url: "https://rameez.dev",
+    url: "https://rameezbadruddinkhwaja.me",
     siteName: "Rameez Bader Khwaja Portfolio",
     images: [
       {
