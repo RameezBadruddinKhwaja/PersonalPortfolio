@@ -16,10 +16,10 @@ export function AboutHero() {
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
           About Me
         </h1>
-        <p className="mt-6 text-xl text-muted-foreground">
+        <p className="mt-6 text-lg sm:text-xl md:text-2xl text-muted-foreground">
           I'm Rameez Bader Khwaja, a Full-Stack Developer and AI enthusiast from Karachi, Pakistan.
         </p>
       </motion.div>
@@ -28,7 +28,7 @@ export function AboutHero() {
         initial={{ opacity: 0 }}
         animate={isInView ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="text-lg text-muted-foreground space-y-4"
+        className="text-base md:text-lg lg:text-xl text-muted-foreground space-y-4"
       >
         <p>
           I've completed my ADP in Computer Information Systems from Hamdard University,

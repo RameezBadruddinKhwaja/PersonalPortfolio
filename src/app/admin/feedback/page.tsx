@@ -64,13 +64,58 @@ export default function FeedbackPage() {
     }
   }
 
+  const exportFeedback = () => {
+    const dataStr = JSON.stringify(feedbacks, null, 2)
+    const blob = new Blob([dataStr], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `feedback-export-${new Date().toISOString().split('T')[0]}.json`
+    link.click()
+  }
+
+  const exportCSV = () => {
+    const headers = ['Name', 'Email', 'Profession', 'Country', 'LinkedIn', 'Message', 'Date']
+    const rows = feedbacks.map(fb => [
+      fb.name,
+      fb.email,
+      fb.profession || '',
+      fb.country || '',
+      fb.linkedin || '',
+      fb.message.replace(/"/g, '""'),
+      new Date(fb.created_at).toLocaleDateString()
+    ])
+
+    const csv = [
+      headers.join(','),
+      ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+    ].join('\n')
+
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `feedback-export-${new Date().toISOString().split('T')[0]}.csv`
+    link.click()
+  }
+
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Feedback</h1>
-        <p className="text-muted-foreground mt-1">
-          Manage feedback submissions from visitors
-        </p>
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold">Feedback</h1>
+          <p className="text-sm md:text-base text-muted-foreground mt-1">
+            Manage feedback submissions from visitors
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <Button onClick={exportCSV} variant="outline" size="sm">
+            Export CSV
+          </Button>
+          <Button onClick={exportFeedback} variant="outline" size="sm">
+            Export JSON
+          </Button>
+        </div>
       </div>
 
       {/* Search */}

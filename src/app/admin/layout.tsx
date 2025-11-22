@@ -11,12 +11,14 @@ import {
   User,
   Home,
   LogOut,
-  Settings
+  Settings,
+  BarChart3
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const adminNavItems = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+  { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
   { name: 'Feedback', href: '/admin/feedback', icon: MessageSquare },
   { name: 'Projects', href: '/admin/projects', icon: FolderKanban },
   { name: 'About', href: '/admin/about', icon: User },
@@ -45,9 +47,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className="min-h-screen flex">
       {/* Sidebar */}
-      <aside className="w-64 border-r bg-card hidden md:flex flex-col">
+      <aside className="w-64 xl:w-72 border-r bg-card hidden md:flex flex-col">
         <div className="p-6 border-b">
-          <Link href="/admin" className="font-bold text-xl">
+          <Link href="/admin" className="font-bold text-xl xl:text-2xl">
             <span className="text-foreground">Rameez</span>
             <span className="text-primary">.admin</span>
           </Link>
@@ -65,13 +67,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                  "flex items-center gap-3 px-3 py-2 rounded-lg text-sm xl:text-base font-medium transition-colors",
                   isActive
                     ? "bg-primary text-primary-foreground"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 )}
               >
-                <Icon className="h-4 w-4" />
+                <Icon className="h-4 w-4 xl:h-5 xl:w-5" />
                 {item.name}
               </Link>
             )

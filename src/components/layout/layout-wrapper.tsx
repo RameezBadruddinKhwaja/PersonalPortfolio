@@ -7,7 +7,7 @@ import { ChatButton } from "@/components/chat/chat-button"
 import { FloatingParticles } from "@/components/3d/floating-particles"
 
 // Pages that should NOT have header/footer/chatbot
-const noLayoutPaths = ["/admin/login", "/login", "/auth"]
+const noLayoutPaths = ["/admin", "/login", "/auth"]
 
 // Pages that should NOT have 3D background (for performance)
 const no3DPaths = ["/admin"]
