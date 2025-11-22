@@ -80,6 +80,17 @@ export const metadata: Metadata = {
     // yandex: "your-yandex-verification-code",
     // bing: "your-bing-verification-code",
   },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
+  },
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
@@ -89,7 +100,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#0fa15d" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Rameez Portfolio" />
+        <link rel="apple-touch-icon" href="/icon-192.png" />
+      </head>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased"

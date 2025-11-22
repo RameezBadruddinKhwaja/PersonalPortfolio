@@ -22,10 +22,10 @@ export function ProjectsSection() {
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
           Projects
         </h1>
-        <p className="mt-2 text-muted-foreground max-w-2xl">
+        <p className="mt-2 text-base md:text-lg lg:text-xl text-muted-foreground max-w-3xl">
           A curated selection of projects demonstrating full-stack development, AI integrations, and cybersecurity tools.
         </p>
       </motion.div>
@@ -57,7 +57,7 @@ export function ProjectsSection() {
 
       {/* Projects Grid */}
       <motion.div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6"
         layout
       >
         <AnimatePresence mode="popLayout">

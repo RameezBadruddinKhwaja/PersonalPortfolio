@@ -12,15 +12,15 @@ export function Hero() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="relative w-full max-w-5xl mx-auto text-center pt-20 lg:pt-32"
+      className="relative w-full max-w-5xl mx-auto text-center pt-20 lg:pt-32 min-h-[600px] md:min-h-[700px] lg:min-h-[800px] flex flex-col justify-center"
     >
       {/* 3D Energy Ring Background */}
-      <div className="absolute inset-0 w-full h-full pointer-events-none">
+      <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
         <EnergyRing />
       </div>
 
       <motion.h1
-        className="text-4xl md:text-5xl lg:text-6xl font-semibold mb-6 relative z-10"
+        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold mb-4 md:mb-6 relative z-10 px-2"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
@@ -33,7 +33,7 @@ export function Hero() {
       </motion.h1>
 
       <motion.p
-        className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 relative z-10"
+        className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto mb-6 md:mb-8 relative z-10 px-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.4 }}

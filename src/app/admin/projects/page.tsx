@@ -21,6 +21,8 @@ export default function ProjectsPage() {
   const [editing, setEditing] = useState<string | null>(null)
   const [isAdding, setIsAdding] = useState(false)
   const [formData, setFormData] = useState<Partial<Project>>({})
+  const [searchQuery, setSearchQuery] = useState('')
+  const [filterCategory, setFilterCategory] = useState<ProjectCategory>('all')
 
   const startEdit = (project: Project) => {
     setEditing(project.id)
@@ -87,9 +89,31 @@ export default function ProjectsPage() {
     })
   }
 
+  // Filter and search projects
+  const filteredProjects = projectList.filter(project => {
+    const matchesSearch = searchQuery === '' ||
+      project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      project.tech.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()))
+
+    const matchesCategory = filterCategory === 'all' || project.category === filterCategory
+
+    return matchesSearch && matchesCategory
+  })
+
+  const exportProjects = () => {
+    const dataStr = JSON.stringify(projectList, null, 2)
+    const blob = new Blob([dataStr], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `projects-${new Date().toISOString().split('T')[0]}.json`
+    link.click()
+  }
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold">Projects</h1>
           <p className="text-muted-foreground mt-1">
@@ -97,12 +121,54 @@ export default function ProjectsPage() {
           </p>
         </div>
         {!isAdding && !editing && (
-          <Button onClick={startAdd}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add Project
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={exportProjects} variant="outline" size="sm">
+              Export JSON
+            </Button>
+            <Button onClick={startAdd}>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Project
+            </Button>
+          </div>
         )}
       </div>
+
+      {/* Search and Filter Bar */}
+      {!isAdding && !editing && (
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex-1">
+                <Input
+                  placeholder="Search projects by title, description, or tech..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              <div className="w-full md:w-48">
+                <Select
+                  value={filterCategory}
+                  onValueChange={(value) => setFilterCategory(value as ProjectCategory)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Filter by category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map(cat => (
+                      <SelectItem key={cat.value} value={cat.value}>
+                        {cat.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <p className="text-sm text-muted-foreground mt-3">
+              Showing {filteredProjects.length} of {projectList.length} projects
+            </p>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Add/Edit Form */}
       {(isAdding || editing) && (
@@ -196,7 +262,13 @@ export default function ProjectsPage() {
 
       {/* Projects List */}
       <div className="grid gap-4">
-        {projectList.map((project) => (
+        {filteredProjects.length === 0 ? (
+          <Card>
+            <CardContent className="py-12 text-center">
+              <p className="text-muted-foreground">No projects found. Try adjusting your search or filters.</p>
+            </CardContent>
+          </Card>
+        ) : filteredProjects.map((project) => (
           <Card key={project.id}>
             <CardContent className="pt-6">
               <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
