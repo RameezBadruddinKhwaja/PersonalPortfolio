@@ -1,15 +1,16 @@
 import { NextResponse } from "next/server"
 import { signToken, setAuthCookie } from "@/lib/auth/jwt"
 import { z } from "zod"
+import bcrypt from "bcryptjs"
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(1, "Password is required"),
 })
 
-// Admin credentials from environment or defaults
+// Admin credentials from environment
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@rameez.dev"
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123"
+const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || ""
 
 export async function POST(request: Request) {
   try {
@@ -26,8 +27,17 @@ export async function POST(request: Request) {
 
     const { email, password } = parsed.data
 
-    // Check credentials (simple comparison for admin)
-    if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
+    // Check email first
+    if (email !== ADMIN_EMAIL) {
+      return NextResponse.json(
+        { error: "Invalid email or password" },
+        { status: 401 }
+      )
+    }
+
+    // Verify password with bcrypt
+    const isPasswordValid = await bcrypt.compare(password, ADMIN_PASSWORD_HASH)
+    if (!isPasswordValid) {
       return NextResponse.json(
         { error: "Invalid email or password" },
         { status: 401 }
