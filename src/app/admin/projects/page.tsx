@@ -50,31 +50,47 @@ export default function ProjectsPage() {
     setFormData({})
   }
 
-  const saveProject = () => {
+  const saveProject = async () => {
     if (!formData.title || !formData.description) {
-      alert('Title and description are required')
+      const { toast } = await import('sonner')
+      toast.error('Title and description are required')
       return
     }
 
-    const project: Project = {
-      id: formData.id || `project-${Date.now()}`,
-      title: formData.title,
-      description: formData.description,
-      tech: formData.tech || [],
-      category: (formData.category as ProjectCategory) || 'web',
-      live: formData.live,
-      repo: formData.repo
-    }
+    const { toast } = await import('sonner')
+    toast.loading('Saving project...', { id: 'save-project' })
 
-    if (isAdding) {
-      setProjectList([...projectList, project])
-    } else if (editing) {
-      setProjectList(projectList.map(p => p.id === editing ? project : p))
-    }
+    try {
+      const response = await fetch('/api/projects', {
+        method: isAdding ? 'POST' : 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          id: formData.id || undefined,
+        })
+      })
 
-    cancelEdit()
-    // Note: In production, this would save to a database/API
-    alert('Project saved! Note: Changes are temporary in this demo. Implement API to persist.')
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to save project')
+      }
+
+      const data = await response.json()
+      const savedProject = data.project
+
+      // Update local state
+      if (isAdding) {
+        setProjectList([...projectList, savedProject])
+      } else if (editing) {
+        setProjectList(projectList.map(p => p.id === editing ? savedProject : p))
+      }
+
+      toast.success('Project saved successfully!', { id: 'save-project' })
+      cancelEdit()
+    } catch (error: any) {
+      console.error('Save error:', error)
+      toast.error(error.message || 'Failed to save project', { id: 'save-project' })
+    }
   }
 
   const deleteProject = (id: string) => {

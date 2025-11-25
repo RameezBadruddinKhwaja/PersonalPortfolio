@@ -5,6 +5,9 @@ import { MainNav } from "@/components/nav/main-nav"
 import { Footer } from "@/components/footer/footer"
 import { ChatButton } from "@/components/chat/chat-button"
 import { FloatingParticles } from "@/components/3d/floating-particles"
+import { ScrollProgress } from "@/components/ui/scroll-progress"
+import { BackToTop } from "@/components/ui/back-to-top"
+import { CommandPalette } from "@/components/ui/command-palette"
 
 // Pages that should NOT have header/footer/chatbot
 const noLayoutPaths = ["/admin", "/login", "/auth"]
@@ -27,6 +30,12 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
     <div className="relative flex min-h-screen flex-col">
       {/* Global 3D Background */}
       {!shouldHide3D && <FloatingParticles />}
+      
+      {/* Scroll Progress Bar */}
+      <ScrollProgress />
+      
+      {/* Command Palette (CMD+K) */}
+      <CommandPalette />
 
       <MainNav />
       <main className="flex-1">
@@ -34,6 +43,7 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
       </main>
       <Footer />
       <ChatButton />
+      <BackToTop />
     </div>
   )
 }

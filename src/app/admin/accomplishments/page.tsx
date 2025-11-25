@@ -56,33 +56,47 @@ export default function AccomplishmentsAdminPage() {
     setImagePreview('')
   }
 
-  const saveAccomplishment = () => {
+  const saveAccomplishment = async () => {
     if (!formData.title || !formData.description || !formData.issuer || !formData.imageUrl) {
-      alert('Title, description, issuer, and image are required')
+      const { toast } = await import('sonner')
+      toast.error('Title, description, issuer, and image are required')
       return
     }
 
-    const accomplishment: Accomplishment = {
-      id: formData.id || `acc-${Date.now()}`,
-      title: formData.title,
-      description: formData.description,
-      category: (formData.category as AccomplishmentCategory) || 'certificate',
-      issuer: formData.issuer,
-      date: formData.date || new Date().toISOString().slice(0, 7),
-      imageUrl: formData.imageUrl,
-      credentialId: formData.credentialId,
-      credentialUrl: formData.credentialUrl,
-      verificationEmail: formData.verificationEmail,
-    }
+    const { toast } = await import('sonner')
+    toast.loading('Saving accomplishment...', { id: 'save-acc' })
 
-    if (isAdding) {
-      setAccomplishmentsList([...accomplishmentsList, accomplishment])
-    } else if (editing) {
-      setAccomplishmentsList(accomplishmentsList.map(a => a.id === editing ? accomplishment : a))
-    }
+    try {
+      const response = await fetch('/api/accomplishments', {
+        method: isAdding ? 'POST' : 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          id: formData.id || undefined,
+        })
+      })
 
-    cancelEdit()
-    alert('Accomplishment saved! Note: Changes are temporary in this demo. Implement API to persist.')
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to save accomplishment')
+      }
+
+      const data = await response.json()
+      const savedAccomplishment = data.accomplishment
+
+      // Update local state
+      if (isAdding) {
+        setAccomplishmentsList([...accomplishmentsList, savedAccomplishment])
+      } else if (editing) {
+        setAccomplishmentsList(accomplishmentsList.map(a => a.id === editing ? savedAccomplishment : a))
+      }
+
+      toast.success('Accomplishment saved successfully!', { id: 'save-acc' })
+      cancelEdit()
+    } catch (error: any) {
+      console.error('Save error:', error)
+      toast.error(error.message || 'Failed to save accomplishment', { id: 'save-acc' })
+    }
   }
 
   const deleteAccomplishment = (id: string) => {

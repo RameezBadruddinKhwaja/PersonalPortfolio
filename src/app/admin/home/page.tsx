@@ -40,10 +40,27 @@ export default function HomePage() {
     })
   }
 
-  const handleSave = () => {
-    // In production, this would save to API/database
-    console.log('Saving home data:', data)
-    alert('Home section saved! Note: Changes are temporary in this demo. Implement API to persist.')
+  const handleSave = async () => {
+    const { toast } = await import('sonner')
+    toast.loading('Saving home page...', { id: 'save-home' })
+
+    try {
+      const response = await fetch('/api/cms/home', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to save')
+      }
+
+      toast.success('Home page saved successfully!', { id: 'save-home' })
+    } catch (error: any) {
+      console.error('Save error:', error)
+      toast.error(error.message || 'Failed to save home page', { id: 'save-home' })
+    }
   }
 
   return (

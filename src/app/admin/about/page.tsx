@@ -56,10 +56,27 @@ export default function AboutPage() {
     setData({ ...data, hobbies: data.hobbies.filter((_, i) => i !== index) })
   }
 
-  const handleSave = () => {
-    // In production, this would save to API/database
-    console.log('Saving about data:', data)
-    alert('About section saved! Note: Changes are temporary in this demo. Implement API to persist.')
+  const handleSave = async () => {
+    const { toast } = await import('sonner')
+    toast.loading('Saving about section...', { id: 'save-about' })
+
+    try {
+      const response = await fetch('/api/cms/about', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to save')
+      }
+
+      toast.success('About section saved successfully!', { id: 'save-about' })
+    } catch (error: any) {
+      console.error('Save error:', error)
+      toast.error(error.message || 'Failed to save about section', { id: 'save-about' })
+    }
   }
 
   return (

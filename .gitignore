@@ -43,3 +43,6 @@ next-env.d.ts
 
 ai_bot/__pycache__/
 .claude/
+
+# MCP config with secrets (NEVER commit)
+.mcp.json

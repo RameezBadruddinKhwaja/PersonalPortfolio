@@ -7,6 +7,7 @@ import { MainNav } from "@/components/nav/main-nav";
 import { Footer } from "@/components/footer/footer";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/react";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: {
@@ -81,6 +82,9 @@ export const metadata: Metadata = {
     // yandex: "your-yandex-verification-code",
     // bing: "your-bing-verification-code",
   },
+  alternates: {
+    canonical: 'https://rameezbadruddinkhwaja.me',
+  },
   viewport: {
     width: "device-width",
     initialScale: 1,
@@ -108,6 +112,42 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Rameez Portfolio" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
+        
+        {/* Structured Data for Google Search */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Person',
+              name: 'Rameez Bader Khwaja',
+              alternateName: 'Rameez Badruddin Khwaja',
+              jobTitle: 'Full Stack & AI Developer',
+              description: 'Full Stack Developer and AI enthusiast from Karachi, Pakistan. Specializing in Next.js, TypeScript, React, Prisma, and AI integrations.',
+              url: 'https://rameezbadruddinkhwaja.me',
+              image: 'https://rameezbadruddinkhwaja.me/og-image.png',
+              sameAs: [
+                'https://github.com/RameezBadruddinKhwaja',
+                'https://linkedin.com/in/rameezbaderkhwaja',
+              ],
+              address: {
+                '@type': 'PostalAddress',
+                addressLocality: 'Karachi',
+                addressCountry: 'Pakistan',
+              },
+              knowsAbout: [
+                'Next.js',
+                'TypeScript',
+                'React',
+                'Full Stack Development',
+                'AI Integration',
+                'Prisma',
+                'Supabase',
+                'Web Development',
+              ],
+            }),
+          }}
+        />
       </head>
       <body
         className={cn(
@@ -128,6 +168,7 @@ export default function RootLayout({
           </AuthProvider>
         </ThemeProvider>
         <Analytics />
+        <Toaster position="top-right" richColors closeButton theme="system" />
       </body>
     </html>
   );
